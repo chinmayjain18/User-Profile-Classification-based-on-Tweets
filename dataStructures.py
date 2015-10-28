@@ -10,8 +10,12 @@ class User:
         tweets: list of tweets
     '''
 
-    def __init__(self, tweets):
-        self.tweets = []
+    def __init__(self, tweets=[], ngrams={}, replacements={}, transforms={}, userInfo={}):
+        self.tweets = tweets
+        self.ngrams = ngrams
+        self.replacements = replacements
+        self.transforms = transforms
+        self.userInfo = userInfo
 
 class Tweet:
     '''
@@ -21,8 +25,13 @@ class Tweet:
         time: time the tweet was sent
     '''
 
-    def __init__(self, text):
-        self.text = text
+    def __init__(self, id=0, tokens=[], timestamp='', rawText='', numTokens=0, numPunctuation=0):
+        self.id = id
+        self.tokens = tokens
+        self.timestamp = timestamp
+        self.rawText = rawText
+        self.numTokens = numTokens
+        self.numPunctuation = numPunctuation
 
 class Feature:
     '''
