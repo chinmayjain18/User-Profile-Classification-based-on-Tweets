@@ -70,7 +70,7 @@ class CapitalizationFeature(Feature):
 
     # tweet: tweet to be evaluated
     def getValue(self, tweet):
-        return sum(1 for c in tweet.text if c.isupper())
+        return sum(1 for c in tweet.rawText if c.isupper())
 
 class AverageTweetLengthFeature(Feature):
     '''
@@ -83,7 +83,7 @@ class AverageTweetLengthFeature(Feature):
     def getValue(self, user):
         val = 0
         for tweet in user.tweets:
-            val += len(tweet)
+            val += len(tweet.rawText)
         if not val:
             return 0
         else:
