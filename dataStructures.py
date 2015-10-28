@@ -7,7 +7,11 @@ class User:
     '''
     User: defines a single user
     Attributes:
-        tweets: list of tweets
+        tweets: list of Tweet objects
+        ngrams: dictionary of ngrams
+        replacements: dictionary of replacements
+        transforms: dictionary of transforms
+        userInfo: dictionary of user info
     '''
 
     def __init__(self, tweets=[], ngrams={}, replacements={}, transforms={}, userInfo={}):
@@ -21,8 +25,12 @@ class Tweet:
     '''
     Tweet: defines a single tweet by a user
     Attributes:
-        text: string containing text of the tweet
-        time: time the tweet was sent
+        id: id for the tweet
+        tokens: tokens for the tweet
+        timestamp: tweet timestamp
+        rawText: raw text of the tweet
+        numTokens: the number of tokens
+        numPunctuation: the number of punctation characters in the tweet
     '''
 
     def __init__(self, id=0, tokens=[], timestamp='', rawText='', numTokens=0, numPunctuation=0):
@@ -62,7 +70,7 @@ class CapitalizationFeature(Feature):
 
     # tweet: tweet to be evaluated
     def getValue(self, tweet):
-        return sum(1 for c in tweet.text if c.isupper())
+        return sum(1 for c in tweet.rawText if c.isupper())
 
 class AverageTweetLengthFeature(Feature):
     '''
@@ -75,7 +83,7 @@ class AverageTweetLengthFeature(Feature):
     def getValue(self, user):
         val = 0
         for tweet in user.tweets:
-            val += len(tweet)
+            val += len(tweet.rawText)
         if not val:
             return 0
         else:
