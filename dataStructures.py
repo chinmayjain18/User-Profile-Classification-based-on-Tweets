@@ -65,26 +65,31 @@ class CapitalizationFeature(Feature):
     '''
     CapitalizationFeature: counts the number of capital letters for a tweet
     '''
+    def __init__(self, tweet):
+        self.tweet = tweet
+
     def getKey(self):
         return 'CapitalizationFeature'
 
     # tweet: tweet to be evaluated
-    def getValue(self, tweet):
-        return sum(1 for c in tweet.rawText if c.isupper())
+    def getValue(self):
+        return sum(1 for c in self.tweet.rawText if c.isupper())
 
 class AverageTweetLengthFeature(Feature):
     '''
     AverageTweetLength: counts the average length of the user's tweets
     '''
+    def __init__(self, user):
+        self.user = user
+
     def getKey(self):
         return 'AverageTweetLength'
 
-    # user: user to be evaluated
-    def getValue(self, user):
+    def getValue(self):
         val = 0
-        for tweet in user.tweets:
+        for tweet in self.user.tweets:
             val += len(tweet.rawText)
         if not val:
             return 0
         else:
-            return val/len(user.tweets)
+            return val/len(self.user.tweets)
