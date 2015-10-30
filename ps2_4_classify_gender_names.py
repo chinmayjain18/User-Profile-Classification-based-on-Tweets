@@ -1,8 +1,3 @@
-import nltk
-from nltk.corpus import names
-import random
-from string import ascii_lowercase
-
 import dataStructures
 
 import pickle
