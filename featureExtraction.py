@@ -8,7 +8,7 @@ from nltk.corpus import stopwords
 def posTagging(tweet):
     return tweet.tags;
 
-# Returns count of personla reference words
+# Returns count of personal reference words
 def countPersonalReferences(tweet):
     listOfWords = list(tweet.tokens);
     count = 0;
