@@ -3,6 +3,8 @@ dataStructures.py
 Defines the User, Tweet, and Feature classes we will be using
 '''
 
+import re
+
 class User:
     '''
     User: defines a single user
@@ -93,3 +95,21 @@ class AverageTweetLengthFeature(Feature):
             return 0
         else:
             return val/len(self.user.tweets)
+
+class NumberOfTimesOthersMentionedFeature(Feature):
+    '''
+    NumberOfTimesOthersMentionedFeature: counts the number of times the user
+    mentions someone else in their tweets
+    '''
+    def __init__(self, user):
+        self.user = user
+
+    def getKey(self):
+        return 'NumberOfTimesOthersMentioned'
+
+    def getValue(self):
+        val = 0
+        comp_regex = re.compile('@[A-z]+')
+        for tweet in self.user.tweets:
+            val += len(re.findall(comp_regex, tweet.rawText))
+        return val
