@@ -52,7 +52,7 @@ class Tweet:
         numPunctuation: the number of punctation characters in the tweet
     '''
 
-    def __init__(self, id=0, tokens=[], timestamp='', rawText='', numTokens=0, numPunctuation=0):
+    def __init__(self, id=0, tokens=[], timestamp=0, rawText='', numTokens=0, numPunctuation=0):
         self.id = id
         self.tokens = tokens
         self.timestamp = timestamp
