@@ -4,6 +4,10 @@ Defines the User, Tweet, and Feature classes we will be using
 '''
 
 import re
+from textblob import TextBlob
+import string
+from nltk.corpus import wordnet
+from nltk.corpus import stopwords
 
 class User:
     '''
@@ -107,7 +111,7 @@ class AverageTweetLengthFeature(Feature):
     def getValue(self):
         val = 0
         for tweet in self.user.tweets:
-            val += len(tweet.rawText)
+            val += len(tweet.tokens)
         if not val:
             return 0
         else:
@@ -130,3 +134,152 @@ class NumberOfTimesOthersMentionedFeature(Feature):
         for tweet in self.user.tweets:
             val += len(re.findall(comp_regex, tweet.rawText))
         return val
+
+class POSTagging(Feature):
+	'''
+	POSTagging: returns Part of Speech tagging for the tweet
+	'''
+	def __init__(self, tweetTB):
+		self.tweetTB = tweetTB;
+
+	def getKey(self):
+		return 'POSTagging';
+
+	def getValue(self):
+		return self.tweetTB.tags;
+
+class CountPersonalReferences(Feature):
+	'''
+	CountPersonalReferences: Counts the number of Personal References used
+	'''
+
+	def __init__(self, tweetTB):
+		self.tweetTB = tweetTB;
+
+	def getKey(self):
+		return 'CountPersonalReferences';
+
+	def getValue(self):
+		listOfWords = list(self.tweetTB.tokens);
+		count = 0;
+		listOfPR = ['I','he','she','we','y;ou','they'];
+		for word in listOfWords:
+			if word in listOfPR:
+				count += 1;
+		return count;
+
+class CountPunctuations(Feature):
+	'''
+	CountPunctuations: Counts the number of Punctuations
+	'''
+
+	def __init__(self, tweetTB):
+		self.tweetTB = tweetTB;
+
+	def getKey(self):
+		return 'CountPunctuations';
+
+	def getValue(self):
+		punctuations = string.punctuation;
+		listOfWords = list(self.tweetTB.tokens);
+		count = 0;
+		for word in listOfWords:
+			if word in punctuations:
+				count += 1;
+		return count;
+
+class CountHashTags(Feature):
+	'''
+	CountHashTags: Counts the number of HashTags in the tweet
+	'''
+
+	def __init__(self, tweetTB):
+		self.tweetTB = tweetTB;
+
+	def getKey(self):
+		return 'CountHashTags';
+
+	def getValue(self):
+		pattern = re.compile('#([a-zA-Z0-9]+)');
+		count = 0;
+		listOfWords = self.tweetTB.split();
+		for word in listOfWords:
+			if pattern.match(word):
+				count += 1;
+		return count;
+
+class CountEmoticon(Feature):
+	'''
+	CountEmoticon:: Counts the number of emoticons in the tweet
+	'''
+
+	def __init__(self, tweetTB):
+		self.tweetTB = tweetTB;
+
+	def getKey(self):
+		return 'CountEmoticon';
+
+	def getValue(self):
+		pattern = re.compile(':\)|:\(|:D|:\'\)|=\)|:O|:P|B\)');
+		count = 0;
+		posTagList = self.tweetTB.tags;
+		for (word,tag) in posTagList:
+			if pattern.match(word):
+				count += 1;
+		return count;
+
+class CountEmotionalWords(Feature):
+	'''
+	CountEmotionalWords: Counts the number of emotional words in the tweet
+	'''
+
+	def __init__(self, tweetTB):
+		self.tweetTB = tweetTB;
+
+	def getKey(self):
+		return 'CountEmotionalWords';
+
+	def getValue(self):
+		file = open('EmotionalWords.txt','r');
+		listOfWords = [word.lower() for word in (file.read()).split(',')];
+		count = 0;
+		for (word,tag) in self.tweetTB.tags:
+			if word in listOfWords:
+				count += 1;
+		return count;
+
+class CountMisspelledWords(Feature):
+	'''
+	CountMisspelledWords: Counts the number of misspelled words in the tweet
+	'''
+
+	def __init__(self,tweetTB):
+		self.tweetTB = tweetTB;
+
+	def getKey(self):
+		return 'CountMisspelledWords';
+
+	def getValue(self):
+		count = 0;
+		stopwordList = stopwords.words('english');
+		for (word,tag) in self.tweetTB.tags:
+			if not wordnet.synsets(word) and word.lower() not in stopwordList and tag != 'SYM':
+				count += 1;
+		return count;
+
+class FrequencyOfTweetingFeature(Feature):
+    '''
+    FrequencyOfTweetingFeature: Builds histogram broken into times when user tweeted
+    '''
+
+    TIME_VECTOR_SIZE = 48 # How many descretized slots are we breaking the time up into
+
+    def __init__(self, user):
+        self.user = user
+
+    def getKey(self):
+        return 'FrequencyOfTweetingFeature'
+
+    def getValue(self):
+        time_vector = [0] * TIME_VECTOR_SIZE
+        pass
