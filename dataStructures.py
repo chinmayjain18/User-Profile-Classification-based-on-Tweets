@@ -23,7 +23,6 @@ class User:
         education: String of education
         year: int of birth year
     '''
-# {'Month': 'July', 'Regions': ['Missouri', 'Illinois'], 'Languages': ['Arabic', 'French', 'English', 'Russian', 'Italian', 'Spanish'], 'Gender': 'Male', 'Occupation': 'Architecture', 'Astrology': 'Cancer', 'Education': 'Professional Bachelor', 'Year': 1970}
     def __init__(self, id="", tweets=[], ngrams={}, replacements={}, transforms={}, userInfo={}, month="", regions=[], languages=[], gender="", occupation="", astrology="", education="", year=0):
         self.id = id
         self.tweets = tweets
