@@ -7,19 +7,37 @@ class User:
     '''
     User: defines a single user
     Attributes:
+        id: string of root folder.
         tweets: list of Tweet objects
         ngrams: dictionary of ngrams
         replacements: dictionary of replacements
         transforms: dictionary of transforms
-        userInfo: dictionary of user info
+        month: String birthMonth
+        regions: List of regions they claim
+        languages: List of strings of languages
+        gender: String of gender
+        occupation: String of occupation
+        astrology: String of zodiac sign
+        education: String of education
+        year: int of birth year
     '''
-
-    def __init__(self, tweets=[], ngrams={}, replacements={}, transforms={}, userInfo={}):
+# {'Month': 'July', 'Regions': ['Missouri', 'Illinois'], 'Languages': ['Arabic', 'French', 'English', 'Russian', 'Italian', 'Spanish'], 'Gender': 'Male', 'Occupation': 'Architecture', 'Astrology': 'Cancer', 'Education': 'Professional Bachelor', 'Year': 1970}
+    def __init__(self, id="", tweets=[], ngrams={}, replacements={}, transforms={}, userInfo={}, month="", regions=[], languages=[], gender="", occupation="", astrology="", education="", year=0):
+        self.id = id
         self.tweets = tweets
         self.ngrams = ngrams
         self.replacements = replacements
         self.transforms = transforms
         self.userInfo = userInfo
+
+        self.month = month
+        self.regions = regions
+        self.languages = languages
+        self.gender = gender
+        self.occupation = occupation
+        self.astrology = astrology
+        self.education = education
+        self.year = year
 
 class Tweet:
     '''

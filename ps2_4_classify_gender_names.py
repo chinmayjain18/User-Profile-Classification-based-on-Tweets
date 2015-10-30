@@ -58,7 +58,10 @@ def load_data(data_folder):
                 tweet = dataStructures.Tweet(id=tweetId, tokens=value["tokenized"], timestamp=value["time"], rawText=value["text"], numTokens=value["tokens"], numPunctuation=value["punc"])
                 tweets_list.append(tweet)
 
-        user = dataStructures.User(tweets=tweets_list, ngrams=ngrams, replacements=replacements, transforms=transforms, userInfo=userInfo)
+        user = dataStructures.User(id=root, tweets=tweets_list, ngrams=ngrams, replacements=replacements, transforms=transforms)
+        if userInfo is not None:
+            for key, value in userInfo.items():
+                setattr(user, key.lower(), value)
         user_list.append(user)
     return user_list
 
