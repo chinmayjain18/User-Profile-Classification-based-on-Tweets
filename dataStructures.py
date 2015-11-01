@@ -306,8 +306,8 @@ class NumberOfMultiTweetsFeature(Feature):
         multi_tweets = []
         num_complete_multi_tweets = 0
         pattern = re.compile('^\(([0-9]+) of ([0-9]+)\)') # Matches: ^(X of Y)
-        
-        for tweet in self.user.tweets
+
+        for tweet in self.user.tweets:
             match = pattern.match(tweet.rawText)
             if match:
                 placed = False
