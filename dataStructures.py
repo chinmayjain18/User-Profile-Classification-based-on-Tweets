@@ -290,3 +290,45 @@ class FrequencyOfTweetingFeature(Feature):
             index_in_time = math.floor(time_in_min/MINUTE_INTERVAL) - 1
             time_vector[index_in_time] += 1
         return time_vector
+
+class NumberOfMultiTweetsFeature(Feature):
+    '''
+    NumberOfMultiTweetsFeature: Counts the number of multi-tweet tweets for the user
+    Note: Counts number of *complete* multi-tweets as 1
+    '''
+    def __init__(self, user):
+        self.user = user
+
+    def getKey(self):
+        return 'NumberOfMultiTweetsFeature'
+
+    def getValue(self):
+        multi_tweets = []
+        num_complete_multi_tweets = 0
+        pattern = re.compile('^\(([0-9]+) of ([0-9]+)\)') # Matches: ^(X of Y)
+        
+        for tweet in self.user.tweets
+            match = pattern.match(tweet.rawText)
+            if match:
+                placed = False
+                tweet_num = match.group(1)
+                of_tweet = match.group(2)
+
+                # Search and see if there is a multi-tweet of the same size missing our number
+                for multi_tweet in multi_tweets:
+                    if len(multi_tweet) == of_tweet and not multi_tweet[tweet_num]:
+                        multi_tweet[tweet_num] = True
+                        placed = True
+                        break
+                # No existing multi-tweet for this tweet, make a new multi-tweet
+                if not placed:
+                    multi_tweet = [False] * of_tweet
+                    multi_tweet[tweet_num] = True
+                    multi_tweets.append(multi_tweet)
+
+        for multi_tweet in multi_tweets:
+            # If all of the mutli-tweet is True, it is a complete multi-tweet
+            if sum(multi_tweet) == len(multi_tweet):
+                num_complete_multi_tweets += 1
+
+        return num_complete_multi_tweets
