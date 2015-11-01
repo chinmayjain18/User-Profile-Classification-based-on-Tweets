@@ -332,3 +332,24 @@ class NumberOfMultiTweetsFeature(Feature):
                 num_complete_multi_tweets += 1
 
         return num_complete_multi_tweets
+
+class CountCategoricalWords(Feature):
+    '''
+    CountCategoricalWords : Counts the number of categorical words in the tweet
+    '''
+    def __init__(self,tweet):
+        self.tweet = tweet;
+    
+    def getKey(self):
+        return 'CountCategoricalWords';
+    
+    def getValue(self):
+        categoricalWordsList = ['help','acheive','success','dreams','goals',
+                                'career','beer','alcohol','sex','football',
+                                'esteem','ego','pride','gym'];
+        wordsList = self.tweet.split(" ");
+        count = 0;
+        for word in wordsList:
+            if word in categoricalWordsList:            
+                count += 1;
+        return count;
