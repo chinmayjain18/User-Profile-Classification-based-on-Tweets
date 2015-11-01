@@ -283,11 +283,11 @@ class FrequencyOfTweetingFeature(Feature):
         return 'FrequencyOfTweetingFeature'
 
     def getValue(self):
-        time_vector = [0] * ((24*60)/MINUTE_INTERVAL) # e.g. 48 for 30 min interval
+        time_vector = [0] * int((24*60)/self.MINUTE_INTERVAL) # e.g. 48 for 30 min interval
         for tweet in self.user.tweets:
-            time = datetime.datetime.utcfromtimestamp(tweet.timestamp)
-            time_in_min = time.hours*60 + time.min
-            index_in_time = math.floor(time_in_min/MINUTE_INTERVAL) - 1
+            time = datetime.datetime.utcfromtimestamp(tweet.timestamp/100)
+            time_in_min = time.hour*60 + time.minute
+            index_in_time = math.floor(time_in_min/self.MINUTE_INTERVAL) - 1
             time_vector[index_in_time] += 1
         return time_vector
 

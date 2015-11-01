@@ -70,15 +70,17 @@ def main():
         if user.gender == "Male" or user.gender == "Female":
             user_gender_list.append(user)
             gender_list.append(user.gender)
-    training_gender_list = gender_list[:20]
-    test_gender_list = gender_list[20:]
+    training_gender_list = gender_list[:30]
+    test_gender_list = gender_list[30:]
 
     # Add features to array
     f_objects = []
     for user in user_gender_list:
         avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
+        freq_tweet = dataStructures.FrequencyOfTweetingFeature(user)
         user_dict = {}
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
+        user_dict[freq_tweet.getKey()] = freq_tweet.getValue()
         f_objects.append(user_dict)
         #cap_list = []
         #for tweet in user.tweets:
@@ -87,8 +89,8 @@ def main():
     #f[1] = AverageTweetLengthFeature(user)
     print(len(f_objects))
     print(f_objects)
-    training_feature_objects = f_objects[:20]
-    test_feature_objects = f_objects[20:]
+    training_feature_objects = f_objects[:30]
+    test_feature_objects = f_objects[30:]
     acc = classifier.get_SVM_Acc(training_feature_objects, training_gender_list, test_feature_objects, test_gender_list)
     print (acc)
     # Generate features dictionary from features
