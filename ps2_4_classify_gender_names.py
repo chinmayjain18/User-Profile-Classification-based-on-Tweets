@@ -1,4 +1,5 @@
 import dataStructures
+import classifier
 
 import pickle
 import sys, os
@@ -63,6 +64,39 @@ def load_data(data_folder):
 def main():
     data_folder = sys.argv[1]
     user_list = load_data(data_folder)
+    user_gender_list = []
+    gender_list = []
+    for user in user_list:
+        if user.gender == "Male" or user.gender == "Female":
+            user_gender_list.append(user)
+            gender_list.append(user.gender)
+    training_gender_list = gender_list[:20]
+    test_gender_list = gender_list[20:]
+
+    # Add features to array
+    f_objects = []
+    for user in user_gender_list:
+        avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
+        user_dict = {}
+        user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
+        f_objects.append(user_dict)
+        #cap_list = []
+        #for tweet in user.tweets:
+        #    cap_list.append(dataStructures.CapitalizationFeature(tweet))
+        #f_objects.append(cap_list)
+    #f[1] = AverageTweetLengthFeature(user)
+    print(len(f_objects))
+    print(f_objects)
+    training_feature_objects = f_objects[:20]
+    test_feature_objects = f_objects[20:]
+    acc = classifier.get_SVM_Acc(training_feature_objects, training_gender_list, test_feature_objects, test_gender_list)
+    print (acc)
+    # Generate features dictionary from features
+    #features = {}
+    #for f in f_objects:
+    #    features[f.getKey()] = f.getValue()
+    #print(len(features))
+    #print (features)
 
 if __name__ == '__main__':
     main()
