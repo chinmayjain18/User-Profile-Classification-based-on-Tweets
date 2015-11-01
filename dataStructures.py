@@ -8,6 +8,8 @@ from textblob import TextBlob
 import string
 from nltk.corpus import wordnet
 from nltk.corpus import stopwords
+import datetime
+import math
 
 class User:
     '''
@@ -272,7 +274,7 @@ class FrequencyOfTweetingFeature(Feature):
     FrequencyOfTweetingFeature: Builds histogram broken into times when user tweeted
     '''
 
-    TIME_VECTOR_SIZE = 48 # How many descretized slots are we breaking the time up into
+    MINUTE_INTERVAL = 30.0 # The size of the histogram buckets in minutes
 
     def __init__(self, user):
         self.user = user
@@ -281,5 +283,10 @@ class FrequencyOfTweetingFeature(Feature):
         return 'FrequencyOfTweetingFeature'
 
     def getValue(self):
-        time_vector = [0] * TIME_VECTOR_SIZE
-        pass
+        time_vector = [0] * ((24*60)/MINUTE_INTERVAL) # e.g. 48 for 30 min interval
+        for tweet in self.user.tweets:
+            time = datetime.datetime.utcfromtimestamp(tweet.timestamp)
+            time_in_min = time.hours*60 + time.min
+            index_in_time = math.floor(time_in_min/MINUTE_INTERVAL) - 1
+            time_vector[index_in_time] += 1
+        return time_vector
