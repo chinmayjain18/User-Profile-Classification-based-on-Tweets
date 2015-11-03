@@ -35,6 +35,40 @@ def get_SVM_Acc(a,b,c,d):
    acc = (Y_pred==Y_data_ts).mean()
 
    return acc
+
+
+def get_Naivebayes_Acc(a,b,c,d):
+
+   # Convert features into vector of numbers
+   from sklearn.feature_extraction import DictVectorizer   
+   v1 = DictVectorizer().fit(a+c) 
+  
+   #define training data
+   X_data_tr = v1.transform(a)
+   Y_data_tr = b
+   
+   #define test data
+   X_data_ts = v1.transform(c)
+   Y_data_ts = d
+
+   #import Naive bayes classifier   
+   from sklearn.naive_bayes import MultinomialNB
+   clf = MultinomialNB()
+   clf.fit(X_data_tr,Y_data_tr)
+   
+   #Use trained model to classify test data
+   Y_pred = clf.predict(X_data_ts)
+
+   acc = (Y_pred==Y_data_ts).mean()
+   
+   #from sklearn.metrics import confusion_matrix
+   #print(confusion_matrix(Y_data_ts,Y_pred))
+   
+   
+
+   return acc
+   
+   
    
    
 '''
