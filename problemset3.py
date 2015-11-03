@@ -79,13 +79,10 @@ def main():
     f_objects = []
     for user in user_gender_list:
         avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
-        freq_tweet = dataStructures.FrequencyOfTweetingFeature(user)
         num_user_mention = dataStructures.NumberOfTimesOthersMentionedFeature(user)
         user_dict = {}
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
-        #user_dict[freq_tweet.getKey()] = freq_tweet.getValue()
         user_dict[num_user_mention.getKey()] = num_user_mention.getValue()
-        f_objects.append(user_dict)
         #cap_list = []
         count = 0
         count_personal_sum = 0
@@ -107,8 +104,10 @@ def main():
         # Merge in time vectors from that feature
         time_vector_feature = dataStructures.FrequencyOfTweetingFeature(user)
         user_dict.update(time_vector_feature.getValue())
-        
-        #f_objects.append(cap_list)
+
+        # Add the user dictionary to the features list.
+        f_objects.append(user_dict)
+
     print(len(f_objects))
     print(f_objects)
     training_feature_objects = f_objects[:30]
