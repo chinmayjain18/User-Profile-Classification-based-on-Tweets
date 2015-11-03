@@ -4,6 +4,8 @@ import classifier
 import pickle
 import sys, os
 
+from textblob import TextBlob
+
 # Input:
 # files = list of strings of filenames in a directory
 # filename = string of file we are looking for.
@@ -86,11 +88,21 @@ def main():
         f_objects.append(user_dict)
         #cap_list = []
         count = 0
+        count_personal_sum = 0
         for tweet in user.tweets:
-        #    cap_list.append(dataStructures.CapitalizationFeature(tweet))
             count_categorical_words = dataStructures.CountCategoricalWords(tweet)
             count += count_categorical_words.getValue()
+            tweetTB = TextBlob(tweet.rawText)
+            count_personal = dataStructures.CountPersonalReferences(tweetTB)
+            count_personal_sum += count_personal.getValue()
+            #array.
+            #pos_tag = dataStructures.POSTagging(tweetTB)
+            #user_dict[pos_tag.getKey()] = pos_tag.getValue()
+            #cap_list.append(dataStructures.CapitalizationFeature(tweet))
+
+
         user_dict[count_categorical_words.getKey()] = count
+        user_dict[count_personal.getKey()] = count_personal_sum
         #f_objects.append(cap_list)
     print(len(f_objects))
     print(f_objects)
