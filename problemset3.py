@@ -6,6 +6,40 @@ import sys, os
 
 from textblob import TextBlob
 
+from enum import Enum
+
+# Possible classes for education
+class EDUCATION_CLASS(Enum):
+    high_school = 'high_school'
+    some_college = 'some_college'
+    graduate = 'graduate'
+
+def _getEducationFromString(user_education):
+    '''
+    Args:
+        input: Input string from user response for education level
+    Returns:
+        EDUCATION_CLASS of user, or None for not sure
+    '''
+    hs_keywords = ['high']
+    sc_keywords = ['bachelor', 'college', 'bs', 'ba']
+    g_keywords = ['doctoral', 'phd', 'ma', 'master', 'graduate', 'mba', 'mlis']
+    if not user_education:
+        return None
+    else:
+        user_education = user_education.lower()
+        print('\n' + user_education)
+        for keyword in hs_keywords:
+            if keyword in user_education:
+                return EDUCATION_CLASS.high_school
+        for keyword in sc_keywords:
+            if keyword in user_education:
+                return EDUCATION_CLASS.some_college
+        for keyword in g_keywords:
+            if keyword in user_education:
+                return EDUCATION_CLASS.graduate
+    return None
+
 # Input:
 # files = list of strings of filenames in a directory
 # filename = string of file we are looking for.
@@ -59,7 +93,10 @@ def load_data(data_folder):
         user = dataStructures.User(id=root, tweets=tweets_list, ngrams=ngrams, replacements=replacements, transforms=transforms)
         if userInfo is not None:
             for key, value in userInfo.items():
-                setattr(user, key.lower(), value)
+                if key == 'Education':
+                    setattr(user, key.lower(), _getEducationFromString(value))
+                else:
+                    setattr(user, key.lower(), value)
         user_list.append(user)
     return user_list
 
