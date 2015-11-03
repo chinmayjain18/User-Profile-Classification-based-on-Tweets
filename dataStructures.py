@@ -292,7 +292,7 @@ class FrequencyOfTweetingFeature(Feature):
             time_vector[index_in_time] += 1
         # Convert vector to dictionary
         time_dict = {}
-        for x in xrange(0, len(time_vector)):
+        for x in range(0, len(time_vector)):
             time_dict[self.getKey() + '_{0}'.format(x)] = time_vector[x]
         return time_dict
 
