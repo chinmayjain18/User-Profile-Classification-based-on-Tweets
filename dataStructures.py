@@ -272,6 +272,7 @@ class CountMisspelledWords(Feature):
 class FrequencyOfTweetingFeature(Feature):
     '''
     FrequencyOfTweetingFeature: Builds histogram broken into times when user tweeted
+    Returns: dictionary of features with how many times the user tweeted in that interval
     '''
 
     MINUTE_INTERVAL = 30.0 # The size of the histogram buckets in minutes
@@ -289,7 +290,11 @@ class FrequencyOfTweetingFeature(Feature):
             time_in_min = time.hour*60 + time.minute
             index_in_time = math.floor(time_in_min/self.MINUTE_INTERVAL) - 1
             time_vector[index_in_time] += 1
-        return time_vector
+        # Convert vector to dictionary
+        time_dict = {}
+        for x in xrange(0, len(time_vector)):
+            time_dict[self.getKey() + '_{0}'.format(x)] = time_vector[x]
+        return time_dict
 
 class NumberOfMultiTweetsFeature(Feature):
     '''
