@@ -103,6 +103,11 @@ def main():
 
         user_dict[count_categorical_words.getKey()] = count
         user_dict[count_personal.getKey()] = count_personal_sum
+
+        # Merge in time vectors from that feature
+        time_vector_feature = dataStructures.FrequencyOfTweetingFeature(user)
+        user_dict.update(time_vector_feature.getValue())
+        
         #f_objects.append(cap_list)
     print(len(f_objects))
     print(f_objects)
