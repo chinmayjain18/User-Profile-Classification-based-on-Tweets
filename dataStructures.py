@@ -164,7 +164,7 @@ class CountPersonalReferences(Feature):
 	def getValue(self):
 		listOfWords = list(self.tweetTB.tokens);
 		count = 0;
-		listOfPR = ['I','he','she','we','y;ou','they'];
+		listOfPR = ['I','he','she','we','you','they'];
 		for word in listOfWords:
 			if word in listOfPR:
 				count += 1;
