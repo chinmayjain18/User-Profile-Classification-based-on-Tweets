@@ -114,7 +114,9 @@ def main():
     training_feature_objects = f_objects[:30]
     test_feature_objects = f_objects[30:]
     acc = classifier.get_SVM_Acc(training_feature_objects, training_gender_list, test_feature_objects, test_gender_list)
+    acc_nb = classifier.get_Naivebayes_Acc(training_feature_objects, training_gender_list, test_feature_objects, test_gender_list)
     print (acc)
+    print(acc_nb)
 
 if __name__ == '__main__':
     main()
