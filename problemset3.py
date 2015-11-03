@@ -28,7 +28,6 @@ def _getEducationFromString(user_education):
         return None
     else:
         user_education = user_education.lower()
-        print('\n' + user_education)
         for keyword in hs_keywords:
             if keyword in user_education:
                 return EDUCATION_CLASS.high_school
@@ -148,18 +147,32 @@ def main():
 
     user_genders = []
     gender_features = []
+    user_educations = []
+    education_features = []
     for user, user_feature in zip(user_list, calculated_features):
         if user.gender == "Male" or user.gender == "Female":
             user_genders.append(user.gender)
             gender_features.append(user_feature)
+        if user.education is not None:
+            user_educations.append(user.education)
+            education_features.append(user_feature)
 
     training_genders = user_genders[:30]
     test_genders = user_genders[30:]
     training_gender_features = gender_features[:30]
     test_gender_features = gender_features[30:]
+    training_educations = user_educations[:30]
+    test_educations = user_educations[30:]
+    training_education_features = education_features[:30]
+    test_education_features = education_features[30:]
 
     acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
+    print (acc)
+    print(acc_nb)
+
+    acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
+    acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
     print (acc)
     print(acc_nb)
 
