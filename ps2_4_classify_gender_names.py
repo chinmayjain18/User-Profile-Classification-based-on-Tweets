@@ -80,25 +80,18 @@ def main():
         freq_tweet = dataStructures.FrequencyOfTweetingFeature(user)
         user_dict = {}
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
-        user_dict[freq_tweet.getKey()] = freq_tweet.getValue()
+        #user_dict[freq_tweet.getKey()] = freq_tweet.getValue()
         f_objects.append(user_dict)
         #cap_list = []
         #for tweet in user.tweets:
         #    cap_list.append(dataStructures.CapitalizationFeature(tweet))
         #f_objects.append(cap_list)
-    #f[1] = AverageTweetLengthFeature(user)
     print(len(f_objects))
     print(f_objects)
     training_feature_objects = f_objects[:30]
     test_feature_objects = f_objects[30:]
     acc = classifier.get_SVM_Acc(training_feature_objects, training_gender_list, test_feature_objects, test_gender_list)
     print (acc)
-    # Generate features dictionary from features
-    #features = {}
-    #for f in f_objects:
-    #    features[f.getKey()] = f.getValue()
-    #print(len(features))
-    #print (features)
 
 if __name__ == '__main__':
     main()
