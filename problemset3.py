@@ -63,57 +63,66 @@ def load_data(data_folder):
         user_list.append(user)
     return user_list
 
-def main():
-    data_folder = sys.argv[1]
-    user_list = load_data(data_folder)
-    user_gender_list = []
-    gender_list = []
-    for user in user_list:
-        if user.gender == "Male" or user.gender == "Female":
-            user_gender_list.append(user)
-            gender_list.append(user.gender)
-    training_gender_list = gender_list[:30]
-    test_gender_list = gender_list[30:]
-
+def calculate_features(user_list):
     # Add features to array
-    f_objects = []
-    for user in user_gender_list:
+    calculated_features = []
+    for user in user_list:
+        user_dict = {}
         avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
         num_user_mention = dataStructures.NumberOfTimesOthersMentionedFeature(user)
-        user_dict = {}
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
         user_dict[num_user_mention.getKey()] = num_user_mention.getValue()
-        #cap_list = []
+
+        #TODO Ugly.
         count = 0
+        count_key = ""
         count_personal_sum = 0
+        count_personal_sum_key = ""
         for tweet in user.tweets:
             count_categorical_words = dataStructures.CountCategoricalWords(tweet)
             count += count_categorical_words.getValue()
+            count_key = count_categorical_words.getKey()
             tweetTB = TextBlob(tweet.rawText)
             count_personal = dataStructures.CountPersonalReferences(tweetTB)
             count_personal_sum += count_personal.getValue()
+            count_personal_sum_key = count_personal.getKey()
             #array.
             #pos_tag = dataStructures.POSTagging(tweetTB)
             #user_dict[pos_tag.getKey()] = pos_tag.getValue()
-            #cap_list.append(dataStructures.CapitalizationFeature(tweet))
 
-
-        user_dict[count_categorical_words.getKey()] = count
-        user_dict[count_personal.getKey()] = count_personal_sum
+        user_dict[count_key] = count
+        user_dict[count_personal_sum_key] = count_personal_sum
 
         # Merge in time vectors from that feature
         time_vector_feature = dataStructures.FrequencyOfTweetingFeature(user)
         user_dict.update(time_vector_feature.getValue())
 
         # Add the user dictionary to the features list.
-        f_objects.append(user_dict)
+        calculated_features.append(user_dict)
+    return calculated_features
 
-    print(len(f_objects))
-    print(f_objects)
-    training_feature_objects = f_objects[:30]
-    test_feature_objects = f_objects[30:]
-    acc = classifier.get_SVM_Acc(training_feature_objects, training_gender_list, test_feature_objects, test_gender_list)
-    acc_nb = classifier.get_Naivebayes_Acc(training_feature_objects, training_gender_list, test_feature_objects, test_gender_list)
+def main():
+    data_folder = sys.argv[1]
+    user_list = load_data(data_folder)
+
+    calculated_features = calculate_features(user_list)
+    print(len(calculated_features))
+    print(calculated_features)
+
+    user_genders = []
+    gender_features = []
+    for user, user_feature in zip(user_list, calculated_features):
+        if user.gender == "Male" or user.gender == "Female":
+            user_genders.append(user.gender)
+            gender_features.append(user_feature)
+
+    training_genders = user_genders[:30]
+    test_genders = user_genders[30:]
+    training_gender_features = gender_features[:30]
+    test_gender_features = gender_features[30:]
+
+    acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
+    acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     print (acc)
     print(acc_nb)
 
