@@ -358,3 +358,21 @@ class CountCategoricalWords(Feature):
             if word in categoricalWordsList:
                 count += 1;
         return count;
+ 
+ 
+class CountRetweet(Feature):
+	
+	#It will give the number of retweets from a user.
+    def __init__(self, user):
+        self.user = user
+        
+    def getKey(self):
+        return 'RetweetCount'
+        
+    def getValue(self):
+        count = 0
+        pattern = re.compile('(RT|retweet|from|via)(?:\b\W*@(\w+))+')
+        for tweet in self.user.tweets:
+            count += len(re.findall(pattern,tweet.rawText))
+        return count 
+
