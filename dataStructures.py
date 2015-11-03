@@ -339,17 +339,17 @@ class CountCategoricalWords(Feature):
     '''
     def __init__(self,tweet):
         self.tweet = tweet;
-    
+
     def getKey(self):
         return 'CountCategoricalWords';
-    
+
     def getValue(self):
         categoricalWordsList = ['help','acheive','success','dreams','goals',
                                 'career','beer','alcohol','sex','football',
                                 'esteem','ego','pride','gym'];
-        wordsList = self.tweet.split(" ");
+        wordsList = self.tweet.rawText.split(" ");
         count = 0;
         for word in wordsList:
-            if word in categoricalWordsList:            
+            if word in categoricalWordsList:
                 count += 1;
         return count;

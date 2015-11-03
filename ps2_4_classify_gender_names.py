@@ -78,13 +78,19 @@ def main():
     for user in user_gender_list:
         avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
         freq_tweet = dataStructures.FrequencyOfTweetingFeature(user)
+        num_user_mention = dataStructures.NumberOfTimesOthersMentionedFeature(user)
         user_dict = {}
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
         #user_dict[freq_tweet.getKey()] = freq_tweet.getValue()
+        user_dict[num_user_mention.getKey()] = num_user_mention.getValue()
         f_objects.append(user_dict)
         #cap_list = []
-        #for tweet in user.tweets:
+        count = 0
+        for tweet in user.tweets:
         #    cap_list.append(dataStructures.CapitalizationFeature(tweet))
+            count_categorical_words = dataStructures.CountCategoricalWords(tweet)
+            count += count_categorical_words.getValue()
+        user_dict[count_categorical_words.getKey()] = count
         #f_objects.append(cap_list)
     print(len(f_objects))
     print(f_objects)
