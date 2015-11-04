@@ -12,9 +12,9 @@ from enum import Enum
 
 # Possible classes for education
 class EDUCATION_CLASS(Enum):
-    high_school = 'high_school'
-    some_college = 'some_college'
-    graduate = 'graduate'
+    high_school = 0
+    some_college = 1
+    graduate = 2
 
 def _getEducationFromString(user_education):
     '''
@@ -194,10 +194,10 @@ def main():
 
     acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
     acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
-    #acc_lr = classifier.get_LinearRegression_Acc(training_education_features, training_educations, test_education_features, test_educations)
+    acc_lr = classifier.get_LinearRegression_Acc(training_education_features, training_educations, test_education_features, test_educations)
     print('\t{0} education accuracy: {1}'.format('SVM', acc))
     print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
-    #print('\t{0} education accuracy: {1}'.format('Linear Regression', acc_lr))
+    print('\t{0} education accuracy: {1}'.format('Linear Regression', acc_lr))
 
 if __name__ == '__main__':
     main()
