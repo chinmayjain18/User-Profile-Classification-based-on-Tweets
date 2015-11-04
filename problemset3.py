@@ -179,13 +179,13 @@ def calculate_features(user_list):
 
         features = []
         features.append(dataStructures.AverageTweetLengthFeature(user))
-        features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
-        features.append(dataStructures.NumberOfMultiTweetsFeature(user))
-        features.append(dataStructures.CountRetweet(user))
-        features.append(dataStructures.CountLanguageUsed(user))
-        features.append(dataStructures.CountRegions(user))
-        features.append(dataStructures.AgeOccupation(user))
-        features.append(dataStructures.CountReplacements(user))
+        #features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
+        # features.append(dataStructures.NumberOfMultiTweetsFeature(user))
+        # features.append(dataStructures.CountRetweet(user))
+        # features.append(dataStructures.CountLanguageUsed(user))
+        # features.append(dataStructures.CountRegions(user))
+        # features.append(dataStructures.AgeOccupation(user))
+        # features.append(dataStructures.CountReplacements(user))
 
         user_dict = {}
         for feature in features:
@@ -197,14 +197,14 @@ def calculate_features(user_list):
             tweet_features = []
             tweetTB = TextBlob(tweet.rawText)
 
-            tweet_features.append(dataStructures.CapitalizationFeature(tweet))
-            # tweet_features.append(dataStructures.POSTagging(tweetTB))
-            tweet_features.append(dataStructures.CountPersonalReferences(tweetTB))
-            tweet_features.append(dataStructures.CountPunctuations(tweetTB))
-            tweet_features.append(dataStructures.CountHashTags(tweet))
-            tweet_features.append(dataStructures.CountEmoticon(tweetTB))
-            tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
-            tweet_features.append(dataStructures.CountCategoricalWords(tweet))
+            # tweet_features.append(dataStructures.CapitalizationFeature(tweet))
+            # # tweet_features.append(dataStructures.POSTagging(tweetTB))
+            # tweet_features.append(dataStructures.CountPersonalReferences(tweetTB))
+            # tweet_features.append(dataStructures.CountPunctuations(tweetTB))
+            # tweet_features.append(dataStructures.CountHashTags(tweet))
+            # tweet_features.append(dataStructures.CountEmoticon(tweetTB))
+            # tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
+            # tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
             for tweet_feature in tweet_features:
                 key = tweet_feature.getKey()
@@ -266,11 +266,12 @@ def _filterFeatures(whitelist, features_list):
         list of dictionaries of features
     '''
     reduced_list = []
-    for features in features_list:
+    for user_feature_dict in features_list:
+        reduced_user_feature_dict = {}
         for key in whitelist:
-            if key in features:
-                reduced_list.append({key : features[key]})
-        #reduced_list.append({ key: features[key] for key in whitelist })
+            if key in user_feature_dict:
+                reduced_user_feature_dict[key] = user_feature_dict[key]
+        reduced_list.append(reduced_user_feature_dict)
     return reduced_list
 
 def main():
@@ -287,29 +288,38 @@ def main():
 
     calculated_features = calculate_features(user_list)
 
-    user_genders = []
-    gender_features = []
+    # Generated list of names of FrequencyOfTweetingFeature's
+    FrequencyOfTweetingFeature_NAMES = []
+    for x in range(0, 48):
+        FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
+
     gender_whitelist = [
         'AverageTweetLength'
-    ]
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    age_whitelist = [
+        'AverageTweetLength'
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    education_whitelist = [
+        'AverageTweetLength'
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    age_bucket_whitelist = [
+        'AverageTweetLength'
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    user_genders = []
+    gender_features = []
 
     user_educations = []
     education_features = []
-    education_whitelist = [
-        'AverageTweetLength'
-    ]
 
     user_ages = []
     age_features =[]
-    age_whitelist = [
-        'AverageTweetLength'
-    ]
 
     user_age_buckets = []
     age_bucket_features = []
-    age_bucket_whitelist = [
-        'AverageTweetLength'
-    ]
 
     for user, user_feature in zip(user_list, calculated_features):
         if user.gender == "Male":
