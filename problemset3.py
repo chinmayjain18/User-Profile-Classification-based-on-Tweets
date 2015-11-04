@@ -203,7 +203,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Problem Set 3')
     parser.add_argument('data_folder', help='path to data folder')
-    parser.add_argument('-v', help='verbose mode')
+    parser.add_argument('-v', help='verbose mode', action="store_true")
 
     args = parser.parse_args()
 
@@ -212,10 +212,6 @@ def main():
     user_list = load_data(args.data_folder)
 
     calculated_features = calculate_features(user_list)
-
-    if verbose_mode:
-        print(len(calculated_features))
-        print(calculated_features)
 
     user_genders = []
     gender_features = []
@@ -252,6 +248,19 @@ def main():
             elif user.year <= 1977:
                 user_age_buckets.append(2)
                 age_bucket_features.append(user_feature)
+
+    if verbose_mode:
+        print(len(calculated_features))
+        print(len(user_list))
+        print(len(user_genders))
+        print(len(gender_features))
+        print(len(user_educations))
+        print(len(education_features))
+        print(len(user_ages))
+        print(len(age_features))
+        print(len(user_age_buckets))
+        print(len(age_bucket_features))
+        print(user_ages)
 
     _testAccuracy('gender', user_genders, gender_features)
     _testAccuracy('education', user_educations, education_features)
