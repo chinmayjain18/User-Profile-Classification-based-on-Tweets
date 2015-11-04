@@ -196,7 +196,10 @@ def _filterFeatures(whitelist, features_list):
     '''
     reduced_list = []
     for features in features_list:
-        reduced_list.append({ key: features[key] for key in whitelist })
+        for key in whitelist:
+            if key in features:
+                reduced_list.append({key : features[key]})
+        #reduced_list.append({ key: features[key] for key in whitelist })
     return reduced_list
 
 def main():
@@ -275,15 +278,15 @@ def main():
         print(user_ages)
 
     ## Test each feature one at a time for everything
-    # feature_keys = gender_features[0].keys()
-    # for feature_name in feature_keys:
-    #     print('\n' + feature_name)
-    #     # Test the accuracy
-    #     _testAccuracy('gender', user_genders, _filterFeatures([feature_name], gender_features))
-    #     _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
-    #     _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
-    #     _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
-    # return
+    feature_keys = gender_features[0].keys()
+    for feature_name in feature_keys:
+        print('\n' + feature_name)
+        # Test the accuracy
+        _testAccuracy('gender', user_genders, _filterFeatures([feature_name], gender_features))
+    #    _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
+    #    _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
+    #    _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
+    return
 
     # Filter out non-whitelist features
     gender_features = _filterFeatures(gender_whitelist, gender_features)
