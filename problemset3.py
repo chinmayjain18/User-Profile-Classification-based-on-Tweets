@@ -102,10 +102,10 @@ def load_data(data_folder):
                 else:
                     setattr(user, key.lower(), value)
         user_list.append(user)
-    
+
     #user_list = completeGenderData(user_list);
     #user_list = completeEducationData(user_list);
-    
+
     return user_list
 
 def completeEducationData(user_list):
@@ -151,7 +151,7 @@ def completeGenderData(user_list):
     missingMale = (int)(n/2) - maleCount;
     missingFemale = (int)(n/2) - femaleCount;
     randomGenderList = [];
-    j = 0;    
+    j = 0;
     for j in range(missingMale):
         randomGenderList.append('Male');
     j =0;
@@ -163,7 +163,7 @@ def completeGenderData(user_list):
         if user.gender is None:
             user.gender = randomGenderList.pop();
     return user_list;
-    
+
 def calculate_features(user_list):
     '''
     Calculates the features for each user in user_list
@@ -349,15 +349,15 @@ def main():
         print(user_ages)
 
     ## Test each feature one at a time for everything
-    feature_keys = gender_features[0].keys()
-    for feature_name in feature_keys:
-        print('\n' + feature_name)
-        # Test the accuracy
-        _testAccuracy('gender', user_genders, _filterFeatures([feature_name], gender_features))
-    #    _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
-    #    _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
-    #    _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
-    return
+    #feature_keys = gender_features[0].keys()
+    #for feature_name in feature_keys:
+    #    print('\n' + feature_name)
+    #    # Test the accuracy
+    #    _testAccuracy('gender', user_genders, _filterFeatures([feature_name], gender_features))
+    ##    _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
+    ##    _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
+    ##    _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
+    #return
 
     # Filter out non-whitelist features
     # gender_features = _filterFeatures(gender_whitelist, gender_features)
