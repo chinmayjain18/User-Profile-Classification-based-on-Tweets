@@ -60,6 +60,10 @@ def get_Naivebayes_Acc(a,b,c,d):
     Y_pred = clf.predict(X_data_ts)
 
     acc = (Y_pred==Y_data_ts).mean()
+    print(len(clf.classes_))
+    print(clf.classes_)
+    most_informative_feature_for_class(v1,clf, clf.classes_[0])
+    #most_informative_feature_for_class(v1,clf, clf.classes_[1])
 
     #from sklearn.metrics import confusion_matrix
     #print(confusion_matrix(Y_data_ts,Y_pred))
@@ -100,6 +104,15 @@ def get_LinearRegression_Acc(a,b,c,d):
     #print(confusion_matrix(Y_data_ts,Y_pred))
 
     return acc
+
+
+def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=10):
+    labelid = list(classifier.classes_).index(classlabel)
+    feature_names = vectorizer.get_feature_names()
+    topn = sorted(zip(classifier.coef_[labelid], feature_names))[-n:]
+
+    for coef, feat in topn:
+        print(classlabel, feat, coef)
 
 
 '''
