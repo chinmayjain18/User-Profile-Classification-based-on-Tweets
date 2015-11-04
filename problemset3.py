@@ -273,11 +273,12 @@ def _filterFeatures(whitelist, features_list):
         list of dictionaries of features
     '''
     reduced_list = []
-    for features in features_list:
+    for user_feature_dict in features_list:
+        reduced_user_feature_dict = {}
         for key in whitelist:
-            if key in features:
-                reduced_list.append({key : features[key]})
-        #reduced_list.append({ key: features[key] for key in whitelist })
+            if key in user_feature_dict:
+                reduced_user_feature_dict[key] = user_feature_dict[key]
+        reduced_list.append(reduced_user_feature_dict)
     return reduced_list
 
 def main():
@@ -294,29 +295,38 @@ def main():
 
     calculated_features = calculate_features(user_list)
 
-    user_genders = []
-    gender_features = []
+    # Generated list of names of FrequencyOfTweetingFeature's
+    FrequencyOfTweetingFeature_NAMES = []
+    for x in range(0, 48):
+        FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
+
     gender_whitelist = [
         'AverageTweetLength'
-    ]
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    age_whitelist = [
+        'AverageTweetLength'
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    education_whitelist = [
+        'AverageTweetLength'
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    age_bucket_whitelist = [
+        'AverageTweetLength'
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    user_genders = []
+    gender_features = []
 
     user_educations = []
     education_features = []
-    education_whitelist = [
-        'AverageTweetLength'
-    ]
 
     user_ages = []
     age_features =[]
-    age_whitelist = [
-        'AverageTweetLength'
-    ]
 
     user_age_buckets = []
     age_bucket_features = []
-    age_bucket_whitelist = [
-        'AverageTweetLength'
-    ]
 
     for user, user_feature in zip(user_list, calculated_features):
         if user.gender == "Male":
