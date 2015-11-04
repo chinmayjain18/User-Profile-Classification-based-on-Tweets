@@ -4,7 +4,6 @@ Defines the User, Tweet, and Feature classes we will be using
 '''
 
 import re
-from textblob import TextBlob
 import string
 from nltk.corpus import wordnet
 from nltk.corpus import stopwords
@@ -423,3 +422,16 @@ class AgeOccupation(Feature):
         else:
             return 0;
         return 1;
+
+class Ngrams(Feature):
+    '''
+    Ngrams : Returns the ngrams from the tweets
+    '''
+    def __init__(self,user):
+        self.user = user;
+    
+    def getKey(self):
+        return 'Ngrams';
+        
+    def getValue(self):
+        return self.user.ngrams
