@@ -153,15 +153,14 @@ class CountPersonalReferences(Feature):
 	'''
 	CountPersonalReferences: Counts the number of Personal References used
 	'''
-
-	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+	def __init__(self, tweet):
+		self.tweet = tweet;
 
 	def getKey(self):
 		return 'CountPersonalReferences';
 
 	def getValue(self):
-		listOfWords = list(self.tweetTB.tokens);
+		listOfWords = list(self.tweet.tokens);
 		count = 0;
 		listOfPR = ['I','he','she','we','you','they'];
 		for word in listOfWords:
@@ -173,16 +172,15 @@ class CountPunctuations(Feature):
 	'''
 	CountPunctuations: Counts the number of Punctuations
 	'''
-
-	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+	def __init__(self, tweet):
+		self.tweet = tweet;
 
 	def getKey(self):
 		return 'CountPunctuations';
 
 	def getValue(self):
 		punctuations = string.punctuation;
-		listOfWords = list(self.tweetTB.tokens);
+		listOfWords = list(self.tweet.tokens);
 		count = 0;
 		for word in listOfWords:
 			if word in punctuations:
@@ -193,9 +191,8 @@ class CountHashTags(Feature):
 	'''
 	CountHashTags: Counts the number of HashTags in the tweet
 	'''
-
-	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+	def __init__(self, tweet):
+		self.tweet = tweet;
 
 	def getKey(self):
 		return 'CountHashTags';
@@ -203,7 +200,7 @@ class CountHashTags(Feature):
 	def getValue(self):
 		pattern = re.compile('#([a-zA-Z0-9]+)');
 		count = 0;
-		listOfWords = self.tweetTB.split();
+		listOfWords = self.tweet.rawText.split(" ");
 		for word in listOfWords:
 			if pattern.match(word):
 				count += 1;
@@ -213,7 +210,6 @@ class CountEmoticon(Feature):
 	'''
 	CountEmoticon:: Counts the number of emoticons in the tweet
 	'''
-
 	def __init__(self, tweetTB):
 		self.tweetTB = tweetTB;
 
@@ -221,11 +217,10 @@ class CountEmoticon(Feature):
 		return 'CountEmoticon';
 
 	def getValue(self):
-		pattern = re.compile(':\)|:\(|:D|:\'\)|=\)|:O|:P|B\)');
 		count = 0;
 		posTagList = self.tweetTB.tags;
 		for (word,tag) in posTagList:
-			if pattern.match(word):
+			if tag == 'SYM':
 				count += 1;
 		return count;
 
@@ -233,19 +228,18 @@ class CountEmotionalWords(Feature):
 	'''
 	CountEmotionalWords: Counts the number of emotional words in the tweet
 	'''
-
 	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+         file = open('EmotionalWords.txt','r');
+         self.listOfWords = [word.lower() for word in (file.read()).split(',')];
+         self.tweetTB = tweetTB;
 
 	def getKey(self):
-		return 'CountEmotionalWords';
+         return 'CountEmotionalWords';
 
 	def getValue(self):
-		file = open('EmotionalWords.txt','r');
-		listOfWords = [word.lower() for word in (file.read()).split(',')];
 		count = 0;
 		for (word,tag) in self.tweetTB.tags:
-			if word in listOfWords:
+			if word in self.listOfWords:
 				count += 1;
 		return count;
 
@@ -253,7 +247,6 @@ class CountMisspelledWords(Feature):
 	'''
 	CountMisspelledWords: Counts the number of misspelled words in the tweet
 	'''
-
 	def __init__(self,tweetTB):
 		self.tweetTB = tweetTB;
 
@@ -273,7 +266,6 @@ class FrequencyOfTweetingFeature(Feature):
     FrequencyOfTweetingFeature: Builds histogram broken into times when user tweeted
     Returns: dictionary of features with how many times the user tweeted in that interval
     '''
-
     MINUTE_INTERVAL = 30.0 # The size of the histogram buckets in minutes
 
     def __init__(self, user):
@@ -435,3 +427,29 @@ class Ngrams(Feature):
         
     def getValue(self):
         return self.user.ngrams
+        
+class Replacements(Feature):
+    '''
+    Replacements : Returns the replacements feature from the pickled files
+    '''
+    def __init__(self,user):
+        self.user = user;
+        
+    def getKey(self):
+        return 'Replacements';
+
+    def getValue(self):
+        return self.user.replacements;
+        
+class Transforms(Feature):
+    '''
+    Transforms : Returns the transform feature from the pickled files
+    '''
+    def __init__(self,user):
+        self.user = user;
+        
+    def getKey(self):
+        return 'Transforms';
+        
+    def getValue(self):
+        return self.user.transforms;
