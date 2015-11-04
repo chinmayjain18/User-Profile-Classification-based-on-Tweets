@@ -196,7 +196,7 @@ def _filterFeatures(whitelist, features_list):
     '''
     reduced_list = []
     for features in features_list:
-        reduced_list.append({ key: features_list[x][key] for key in whitelist })
+        reduced_list.append({ key: features[key] for key in whitelist })
     return reduced_list
 
 def main():
@@ -215,15 +215,27 @@ def main():
 
     user_genders = []
     gender_features = []
+    gender_whitelist = [
+        'AverageTweetLength'
+    ]
 
     user_educations = []
     education_features = []
+    education_whitelist = [
+        'AverageTweetLength'
+    ]
 
     user_ages = []
     age_features =[]
+    age_whitelist = [
+        'AverageTweetLength'
+    ]
 
     user_age_buckets = []
     age_bucket_features = []
+    age_bucket_whitelist = [
+        'AverageTweetLength'
+    ]
 
     for user, user_feature in zip(user_list, calculated_features):
         if user.gender == "Male":
@@ -262,6 +274,13 @@ def main():
         print(len(age_bucket_features))
         print(user_ages)
 
+    # Filter out non-whitelist features
+    gender_features = _filterFeatures(gender_whitelist, gender_features)
+    education_features = _filterFeatures(education_whitelist, education_features)
+    age_features = _filterFeatures(age_whitelist, age_features)
+    age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
+
+    # Test the accuracy
     _testAccuracy('gender', user_genders, gender_features)
     _testAccuracy('education', user_educations, education_features)
     _testAccuracy('age', user_ages, age_features)
