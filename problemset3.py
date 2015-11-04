@@ -120,6 +120,7 @@ def calculate_features(user_list):
         features.append(dataStructures.AverageTweetLengthFeature(user))
         features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
         features.append(dataStructures.CountLanguageUsed(user))
+        features.append(dataStructures.AgeOccupation(user))
 
         user_dict = {}
         for feature in features:
