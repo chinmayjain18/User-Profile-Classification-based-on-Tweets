@@ -185,6 +185,7 @@ def calculate_features(user_list):
         features.append(dataStructures.CountLanguageUsed(user))
         features.append(dataStructures.CountRegions(user))
         features.append(dataStructures.AgeOccupation(user))
+        features.append(dataStructures.CountReplacements(user))
 
         user_dict = {}
         for feature in features:
@@ -203,7 +204,6 @@ def calculate_features(user_list):
             tweet_features.append(dataStructures.CountHashTags(tweet))
             tweet_features.append(dataStructures.CountEmoticon(tweetTB))
             tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
-            tweet_features.append(dataStructures.CountMisspelledWords(tweetTB))
             tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
             for tweet_feature in tweet_features:

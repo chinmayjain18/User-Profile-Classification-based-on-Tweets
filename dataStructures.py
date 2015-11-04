@@ -456,35 +456,35 @@ class Ngrams(Feature):
     '''
     def __init__(self,user):
         self.user = user;
-    
+
     def getKey(self):
         return 'Ngrams';
-        
+
     def getValue(self):
         return self.user.ngrams
-        
-class Replacements(Feature):
+
+class CountReplacements(Feature):
     '''
-    Replacements : Returns the replacements feature from the pickled files
+    Replacements : Returns the number of replacements from the pickled files
     '''
     def __init__(self,user):
         self.user = user;
-        
+
     def getKey(self):
         return 'Replacements';
 
     def getValue(self):
-        return self.user.replacements;
-        
+        return len(self.user.replacements);
+
 class Transforms(Feature):
     '''
     Transforms : Returns the transform feature from the pickled files
     '''
     def __init__(self,user):
         self.user = user;
-        
+
     def getKey(self):
         return 'Transforms';
-        
+
     def getValue(self):
         return self.user.transforms;
