@@ -102,10 +102,10 @@ def load_data(data_folder):
                 else:
                     setattr(user, key.lower(), value)
         user_list.append(user)
-    
+
     #user_list = completeGenderData(user_list);
     #user_list = completeEducationData(user_list);
-    
+
     return user_list
 
 def completeEducationData(user_list):
@@ -151,7 +151,7 @@ def completeGenderData(user_list):
     missingMale = (int)(n/2) - maleCount;
     missingFemale = (int)(n/2) - femaleCount;
     randomGenderList = [];
-    j = 0;    
+    j = 0;
     for j in range(missingMale):
         randomGenderList.append('Male');
     j =0;
@@ -163,7 +163,7 @@ def completeGenderData(user_list):
         if user.gender is None:
             user.gender = randomGenderList.pop();
     return user_list;
-    
+
 def calculate_features(user_list):
     '''
     Calculates the features for each user in user_list
@@ -200,7 +200,7 @@ def calculate_features(user_list):
             # tweet_features.append(dataStructures.POSTagging(tweetTB))
             tweet_features.append(dataStructures.CountPersonalReferences(tweetTB))
             tweet_features.append(dataStructures.CountPunctuations(tweetTB))
-            tweet_features.append(dataStructures.CountHashTags(tweetTB))
+            tweet_features.append(dataStructures.CountHashTags(tweet))
             tweet_features.append(dataStructures.CountEmoticon(tweetTB))
             tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
             tweet_features.append(dataStructures.CountMisspelledWords(tweetTB))
