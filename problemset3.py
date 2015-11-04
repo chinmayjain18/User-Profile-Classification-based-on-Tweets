@@ -30,13 +30,13 @@ def _getEducationFromString(user_education):
         user_education = user_education.lower()
         for keyword in hs_keywords:
             if keyword in user_education:
-                return EDUCATION_CLASS.high_school
+                return EDUCATION_CLASS.high_school.value
         for keyword in sc_keywords:
             if keyword in user_education:
-                return EDUCATION_CLASS.some_college
+                return EDUCATION_CLASS.some_college.value
         for keyword in g_keywords:
             if keyword in user_education:
-                return EDUCATION_CLASS.graduate
+                return EDUCATION_CLASS.graduate.value
     return None
 
 # Input:
