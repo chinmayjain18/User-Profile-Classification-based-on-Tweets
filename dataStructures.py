@@ -153,15 +153,14 @@ class CountPersonalReferences(Feature):
 	'''
 	CountPersonalReferences: Counts the number of Personal References used
 	'''
-
-	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+	def __init__(self, tweet):
+		self.tweet = tweet;
 
 	def getKey(self):
 		return 'CountPersonalReferences';
 
 	def getValue(self):
-		listOfWords = list(self.tweetTB.tokens);
+		listOfWords = list(self.tweet.tokens);
 		count = 0;
 		listOfPR = ['I','he','she','we','you','they'];
 		for word in listOfWords:
@@ -174,15 +173,15 @@ class CountPunctuations(Feature):
 	CountPunctuations: Counts the number of Punctuations
 	'''
 
-	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+	def __init__(self, tweet):
+		self.tweet = tweet;
 
 	def getKey(self):
 		return 'CountPunctuations';
 
 	def getValue(self):
 		punctuations = string.punctuation;
-		listOfWords = list(self.tweetTB.tokens);
+		listOfWords = list(self.tweet.tokens);
 		count = 0;
 		for word in listOfWords:
 			if word in punctuations:
@@ -194,8 +193,8 @@ class CountHashTags(Feature):
 	CountHashTags: Counts the number of HashTags in the tweet
 	'''
 
-	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+	def __init__(self, tweet):
+		self.tweet = tweet;
 
 	def getKey(self):
 		return 'CountHashTags';
@@ -203,7 +202,7 @@ class CountHashTags(Feature):
 	def getValue(self):
 		pattern = re.compile('#([a-zA-Z0-9]+)');
 		count = 0;
-		listOfWords = self.tweetTB.split();
+		listOfWords = self.tweet.rawText.split(" ");
 		for word in listOfWords:
 			if pattern.match(word):
 				count += 1;
@@ -221,11 +220,10 @@ class CountEmoticon(Feature):
 		return 'CountEmoticon';
 
 	def getValue(self):
-		pattern = re.compile(':\)|:\(|:D|:\'\)|=\)|:O|:P|B\)');
 		count = 0;
 		posTagList = self.tweetTB.tags;
 		for (word,tag) in posTagList:
-			if pattern.match(word):
+			if tag == 'SYM':
 				count += 1;
 		return count;
 
@@ -435,3 +433,29 @@ class Ngrams(Feature):
         
     def getValue(self):
         return self.user.ngrams
+        
+class Replacements(Feature):
+    '''
+    Replacements : Returns the replacements feature from the pickled files
+    '''
+    def __init__(self,user):
+        self.user = user;
+        
+    def getKey(self):
+        return 'Replacements';
+
+    def getValue(self):
+        return self.user.replacements;
+        
+class Transforms(Feature):
+    '''
+    Transforms : Returns the transform feature from the pickled files
+    '''
+    def __init__(self,user):
+        self.user = user;
+        
+    def getKey(self):
+        return 'Transforms';
+        
+    def getValue(self):
+        return self.user.transforms;
