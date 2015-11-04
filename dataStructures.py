@@ -376,3 +376,28 @@ class CountRetweet(Feature):
             count += len(re.findall(pattern,tweet.rawText))
         return count 
 
+class CountLanguageUsed(Feature):
+	'''
+	CountLanguageUsed : Counts the number of languages the user knows
+	'''
+	def __init__(self,user):
+		self.user = user;
+		
+	def getKey(self):
+		return 'CountLanguageUsed';
+		
+	def getValue(self):
+		return len(self.user.languages);
+		
+class CountRegions(Feature):
+	'''
+	CountRegions : Counts the number of regions visited by the user
+	'''
+	def __init__(self,user):
+		self.user = user;
+	
+	def getKey(self):
+		return 'CountRegions';
+		
+	def getValue(self):
+		return len(self.user.regions);
