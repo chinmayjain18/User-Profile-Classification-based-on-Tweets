@@ -203,7 +203,6 @@ def calculate_features(user_list):
             tweet_features.append(dataStructures.CountHashTags(tweet))
             tweet_features.append(dataStructures.CountEmoticon(tweetTB))
             tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
-            tweet_features.append(dataStructures.CountMisspelledWords(tweetTB))
             tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
             for tweet_feature in tweet_features:

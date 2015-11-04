@@ -242,24 +242,6 @@ class CountEmotionalWords(Feature):
 				count += 1;
 		return count;
 
-class CountMisspelledWords(Feature):
-	'''
-	CountMisspelledWords: Counts the number of misspelled words in the tweet
-	'''
-	def __init__(self,tweetTB):
-		self.tweetTB = tweetTB;
-
-	def getKey(self):
-		return 'CountMisspelledWords';
-
-	def getValue(self):
-		count = 0;
-		stopwordList = stopwords.words('english');
-		for (word,tag) in self.tweetTB.tags:
-			if not wordnet.synsets(word) and word.lower() not in stopwordList and tag != 'SYM':
-				count += 1;
-		return count;
-
 class FrequencyOfTweetingFeature(Feature):
     '''
     FrequencyOfTweetingFeature: Builds histogram broken into times when user tweeted
@@ -420,35 +402,35 @@ class Ngrams(Feature):
     '''
     def __init__(self,user):
         self.user = user;
-    
+
     def getKey(self):
         return 'Ngrams';
-        
+
     def getValue(self):
         return self.user.ngrams
-        
+
 class Replacements(Feature):
     '''
     Replacements : Returns the replacements feature from the pickled files
     '''
     def __init__(self,user):
         self.user = user;
-        
+
     def getKey(self):
         return 'Replacements';
 
     def getValue(self):
         return self.user.replacements;
-        
+
 class Transforms(Feature):
     '''
     Transforms : Returns the transform feature from the pickled files
     '''
     def __init__(self,user):
         self.user = user;
-        
+
     def getKey(self):
         return 'Transforms';
-        
+
     def getValue(self):
         return self.user.transforms;
