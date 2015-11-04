@@ -60,9 +60,9 @@ def get_Naivebayes_Acc(a,b,c,d):
     Y_pred = clf.predict(X_data_ts)
 
     acc = (Y_pred==Y_data_ts).mean()
-    print(len(clf.classes_))
-    print(clf.classes_)
-    most_informative_feature_for_class(v1,clf, clf.classes_[0])
+    #print(len(clf.classes_))
+    #print(clf.classes_)
+    #most_informative_feature_for_class(v1,clf, clf.classes_[0])
     #most_informative_feature_for_class(v1,clf, clf.classes_[1])
 
     #from sklearn.metrics import confusion_matrix

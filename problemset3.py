@@ -224,6 +224,9 @@ def main():
     user_ages = []
     age_features =[]
 
+    user_age_buckets = []
+    age_bucket_features = []
+
     for user, user_feature in zip(user_list, calculated_features):
         if user.gender == "Male":
             user_genders.append(0)
@@ -239,10 +242,21 @@ def main():
         if user.year != None:
             user_ages.append(user.year)
             age_features.append(user_feature)
+        if user.year != None:
+            if user.year < 2015 and user.year >=1988:
+                user_age_buckets.append(0)
+                age_bucket_features.append(user_feature)
+            elif user.year < 1988 and user.year > 1977:
+                user_age_buckets.append(1)
+                age_bucket_features.append(user_feature)
+            elif user.year < 1977:
+                user_age_buckets.append(2)
+                age_bucket_features.append(user_feature)
 
     _testAccuracy('gender', user_genders, gender_features)
     _testAccuracy('education', user_educations, education_features)
     _testAccuracy('age', user_ages, age_features)
+    _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
 
 if __name__ == '__main__':
     main()
