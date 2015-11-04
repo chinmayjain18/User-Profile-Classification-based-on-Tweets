@@ -146,14 +146,19 @@ def main():
 
     parser = argparse.ArgumentParser(description='Problem Set 3')
     parser.add_argument('data_folder', help='path to data folder')
+    parser.add_argument('-v', help='verbose mode')
 
     args = parser.parse_args()
+
+    verbose_mode = bool(args.v)
 
     user_list = load_data(args.data_folder)
 
     calculated_features = calculate_features(user_list)
-    print(len(calculated_features))
-    print(calculated_features)
+
+    if verbose_mode:
+        print(len(calculated_features))
+        print(calculated_features)
 
     user_genders = []
     gender_features = []
@@ -178,13 +183,13 @@ def main():
 
     acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
-    print (acc)
-    print(acc_nb)
+    print('\t{0} gender accuracy: {1}'.format('SVM', acc))
+    print('\t{0} gender accuracy: {1}'.format('Naive Bayes', acc_nb))
 
     acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
     acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
-    print (acc)
-    print(acc_nb)
+    print('\t{0} education accuracy: {1}'.format('SVM', acc))
+    print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
 
 if __name__ == '__main__':
     main()
