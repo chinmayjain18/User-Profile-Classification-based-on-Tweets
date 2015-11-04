@@ -183,6 +183,19 @@ def _testAccuracy(display_type, classes, features):
     acc = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
     print(ACC_STRING.format(display_type, 'Linear Regression', acc))
 
+def _filterFeatures(whitelist, features_list):
+    '''
+    Filters out every features that isn't on the whitelist
+    Args:
+        whitelist: list of strings of the feature keys to keep
+        features: list of dictionaries of features
+    Returns:
+        list of dictionaries of features
+    '''
+    reduced_list = []
+    for features in features_list:
+        reduced_list.append({ key: features_list[x][key] for key in whitelist })
+    return reduced_list
 
 def main():
 
