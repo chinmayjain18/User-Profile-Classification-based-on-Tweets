@@ -183,13 +183,17 @@ def main():
 
     acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
+    acc_lr = classifier.get_LinearRegression_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     print('\t{0} gender accuracy: {1}'.format('SVM', acc))
     print('\t{0} gender accuracy: {1}'.format('Naive Bayes', acc_nb))
+    print('\t{0} gender accuracy: {1}'.format('Linear Regression', acc_lr))
 
     acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
     acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
+    acc_lr = classifier.get_LinearRegression_Acc(training_education_features, training_educations, test_education_features, test_educations)
     print('\t{0} education accuracy: {1}'.format('SVM', acc))
     print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
+    print('\t{0} education accuracy: {1}'.format('Linear Regression', acc_lr))
 
 if __name__ == '__main__':
     main()
