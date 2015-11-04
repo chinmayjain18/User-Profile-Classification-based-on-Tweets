@@ -249,7 +249,7 @@ def main():
             elif user.year < 1988 and user.year > 1977:
                 user_age_buckets.append(1)
                 age_bucket_features.append(user_feature)
-            elif user.year < 1977:
+            elif user.year <= 1977:
                 user_age_buckets.append(2)
                 age_bucket_features.append(user_feature)
 
