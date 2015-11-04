@@ -101,8 +101,68 @@ def load_data(data_folder):
                 else:
                     setattr(user, key.lower(), value)
         user_list.append(user)
+    
+    #user_list = completeGenderData(user_list);
+    #user_list = completeEducationData(user_list);
+    
     return user_list
 
+def completeEducationData(user_list):
+    highSchoolCount = 0;
+    bachelorsCount = 0;
+    graduateCount = 0;
+    n = len(user_list);
+    for user in user_list:
+        if user.education == 0:
+            highSchoolCount += 1;
+        elif user.education == 1:
+            bachelorsCount += 1;
+        elif user.education == 2:
+            graduateCount += 1;
+    missingHighSchool = (int)(n/3) - highSchoolCount;
+    missingBachelors = (int)(n/3) - bachelorsCount;
+    missingGarduates = (int)(n/3) - graduateCount;
+    randomEducationList = [];
+    j = 0;
+    for j in range(missingHighSchool):
+        randomEducationList.append(0);
+    j = 0;
+    for j in range(missingBachelors):
+        randomEducationList.append(1);
+    j = 0;
+    for j in range(missingGarduates):
+        randomEducationList.append(2);
+    shuffle(randomEducationList);
+    for x in user_list:
+        if x.education is None:
+            x.education = randomEducationList.pop();
+    return user_list;
+
+def completeGenderData(user_list):
+    maleCount = 0;
+    femaleCount = 0;
+    n = len(user_list);
+    for user in user_list:
+        if user.gender == 'Male':
+            maleCount += 1;
+        elif user.gender == 'Female':
+            femaleCount += 1;
+    missingMale = (int)(n/2) - maleCount;
+    missingFemale = (int)(n/2) - femaleCount;
+    randomGenderList = [];
+    j = 0;    
+    for j in range(missingMale):
+        randomGenderList.append('Male');
+    j =0;
+    for j in range(missingFemale):
+        randomGenderList.append('Female');
+    shuffle(randomGenderList);
+    user = '';
+    for user in user_list:
+        if user.gender is None:
+            user.gender = randomGenderList.pop();
+    return user_list;
+    
 def calculate_features(user_list):
     '''
     Calculates the features for each user in user_list
