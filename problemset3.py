@@ -177,8 +177,12 @@ def main():
     education_features = []
 
     for user, user_feature in zip(user_list, calculated_features):
-        if user.gender == "Male" or user.gender == "Female":
-            user_genders.append(user.gender)
+        if user.gender == "Male":
+            user_genders.append(0)
+        elif user.gender == "Female":
+            user_genders.append(1)
+        else:
+            print(user.gender)
             gender_features.append(user_feature)
         if user.education is not None:
             user_educations.append(user.education)
@@ -198,10 +202,10 @@ def main():
 
     acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
-    #acc_lr = classifier.get_LinearRegression_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
+    acc_lr = classifier.get_LinearRegression_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     print('\t{0} gender accuracy: {1}'.format('SVM', acc))
     print('\t{0} gender accuracy: {1}'.format('Naive Bayes', acc_nb))
-    #print('\t{0} gender accuracy: {1}'.format('Linear Regression', acc_lr))
+    print('\t{0} gender accuracy: {1}'.format('Linear Regression', acc_lr))
 
     acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
     acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
