@@ -8,6 +8,7 @@ from textblob import TextBlob
 
 import argparse
 
+from random import shuffle
 from enum import Enum
 
 # Possible classes for education
