@@ -5,6 +5,8 @@ Defines the User, Tweet, and Feature classes we will be using
 
 import re
 import string
+from nltk.corpus import wordnet
+from nltk.corpus import stopwords
 import datetime
 import math
 
@@ -138,12 +140,12 @@ class CountNouns(Feature):
     '''
     CountNouns : Counts the number of nouns in the tweet
     '''
-    def __init__(self,tweetTB):
-        self.tags = tweetTB.tags;
-        
+    def __init__(self,tweetTB, tags):
+        self.tags = tags;
+
     def getKey(self):
         return 'CountNouns';
-        
+
     def getValue(self):
         count = 0;
         for (word,tag) in self.tags:
@@ -155,12 +157,12 @@ class CountVerbs(Feature):
     '''
     CountVerbs : Counts the number of verbs in the tweet
     '''
-    def __init__(self,tweetTB):
-        self.tags = tweetTB.tags;
-        
+    def __init__(self,tweetTB, tags):
+        self.tags = tags;
+
     def getKey(self):
         return 'CountVerbs';
-        
+
     def getValue(self):
         count = 0;
         for (word,tag) in self.tags:
@@ -172,12 +174,12 @@ class CountAdjectives(Feature):
     '''
     CountAdjectives : Counts the number of adjectives in the tweet
     '''
-    def __init__(self,tweetTB):
-        self.tags = tweetTB.tags;
-        
+    def __init__(self,tweetTB, tags):
+        self.tags = tags;
+
     def getKey(self):
         return 'CountAdjectives';
-        
+
     def getValue(self):
         count = 0;
         for (word,tag) in self.tags:
@@ -189,8 +191,8 @@ class CountPersonalReferences(Feature):
 	'''
 	CountPersonalReferences: Counts the number of Personal References used
 	'''
-	def __init__(self, tweetTB):
-		self.tags = tweetTB.tags;
+	def __init__(self, tweetTB, tags):
+		self.tags = tags;
 
 	def getKey(self):
 		return 'CountPersonalReferences';
@@ -213,13 +215,7 @@ class CountPunctuations(Feature):
 		return 'CountPunctuations';
 
 	def getValue(self):
-		punctuations = string.punctuation;
-		listOfWords = list(self.tweet.tokens);
-		count = 0;
-		for word in listOfWords:
-			if word in punctuations:
-				count += 1;
-		return count;
+		return self.tweet.numPunctuation;
 
 class CountHashTags(Feature):
 	'''
@@ -244,8 +240,8 @@ class CountEmoticon(Feature):
 	'''
 	CountEmoticon:: Counts the number of emoticons in the tweet
 	'''
-	def __init__(self, tweetTB):
-           self.tags = tweetTB.tags;
+	def __init__(self, tweetTB, tags):
+           self.tags = tags;
 
 	def getKey(self):
 		return 'CountEmoticon';
@@ -261,10 +257,9 @@ class CountEmotionalWords(Feature):
 	'''
 	CountEmotionalWords: Counts the number of emotional words in the tweet
 	'''
-	def __init__(self, tweetTB):
-         file = open('EmotionalWords.txt','r');
-         self.listOfWords = [word.lower() for word in (file.read()).split(',')];
-         self.tags = tweetTB.tags;
+	def __init__(self, tweetTB, listOfWords, tags):
+         self.listOfWords = listOfWords
+         self.tags = tags;
 
 	def getKey(self):
          return 'CountEmotionalWords';
@@ -273,24 +268,6 @@ class CountEmotionalWords(Feature):
 		count = 0;
 		for (word,tag) in self.tags:
 			if word in self.listOfWords:
-				count += 1;
-		return count;
-
-class CountMisspelledWords(Feature):
-	'''
-	CountMisspelledWords: Counts the number of misspelled words in the tweet
-	'''
-	def __init__(self,tweetTB):
-		self.tags = tweetTB.tags;
-
-	def getKey(self):
-		return 'CountMisspelledWords';
-
-	def getValue(self):
-		count = 0;
-		stopwordList = stopwords.words('english');
-		for (word,tag) in self.tags:
-			if not wordnet.synsets(word) and word.lower() not in stopwordList and tag != 'SYM':
 				count += 1;
 		return count;
 

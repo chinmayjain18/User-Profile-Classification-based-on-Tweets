@@ -175,6 +175,10 @@ def calculate_features(user_list):
     '''
     calculated_features = []
 
+    # Load emotional words.
+    file = open('EmotionalWords.txt','r');
+    listOfEmotionalWords = [word.lower() for word in (file.read()).split(',')];
+
     for user in user_list:
 
         features = []
@@ -196,14 +200,17 @@ def calculate_features(user_list):
 
             tweet_features = []
             tweetTB = TextBlob(tweet.rawText)
+            tweetTB_tags = tweetTB.tags
 
             tweet_features.append(dataStructures.CapitalizationFeature(tweet))
-            # tweet_features.append(dataStructures.POSTagging(tweetTB))
-            tweet_features.append(dataStructures.CountPersonalReferences(tweetTB))
-            tweet_features.append(dataStructures.CountPunctuations(tweetTB))
+            tweet_features.append(dataStructures.CountNouns(tweetTB, tweetTB_tags))
+            tweet_features.append(dataStructures.CountVerbs(tweetTB, tweetTB_tags))
+            tweet_features.append(dataStructures.CountAdjectives(tweetTB, tweetTB_tags))
+            tweet_features.append(dataStructures.CountPersonalReferences(tweetTB, tweetTB_tags))
+            tweet_features.append(dataStructures.CountPunctuations(tweet))
             tweet_features.append(dataStructures.CountHashTags(tweet))
-            tweet_features.append(dataStructures.CountEmoticon(tweetTB))
-            tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
+            tweet_features.append(dataStructures.CountEmoticon(tweetTB, tweetTB_tags))
+            tweet_features.append(dataStructures.CountEmotionalWords(tweetTB, listOfEmotionalWords, tweetTB_tags))
             tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
             for tweet_feature in tweet_features:
