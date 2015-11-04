@@ -8,6 +8,7 @@ from textblob import TextBlob
 
 import argparse
 
+from random import shuffle
 from enum import Enum
 
 # Possible classes for education
@@ -101,8 +102,68 @@ def load_data(data_folder):
                 else:
                     setattr(user, key.lower(), value)
         user_list.append(user)
+    
+    #user_list = completeGenderData(user_list);
+    #user_list = completeEducationData(user_list);
+    
     return user_list
 
+def completeEducationData(user_list):
+    highSchoolCount = 0;
+    bachelorsCount = 0;
+    graduateCount = 0;
+    n = len(user_list);
+    for user in user_list:
+        if user.education == 0:
+            highSchoolCount += 1;
+        elif user.education == 1:
+            bachelorsCount += 1;
+        elif user.education == 2:
+            graduateCount += 1;
+    missingHighSchool = (int)(n/3) - highSchoolCount;
+    missingBachelors = (int)(n/3) - bachelorsCount;
+    missingGarduates = (int)(n/3) - graduateCount;
+    randomEducationList = [];
+    j = 0;
+    for j in range(missingHighSchool):
+        randomEducationList.append(0);
+    j = 0;
+    for j in range(missingBachelors):
+        randomEducationList.append(1);
+    j = 0;
+    for j in range(missingGarduates):
+        randomEducationList.append(2);
+    shuffle(randomEducationList);
+    for x in user_list:
+        if x.education is None:
+            x.education = randomEducationList.pop();
+    return user_list;
+
+def completeGenderData(user_list):
+    maleCount = 0;
+    femaleCount = 0;
+    n = len(user_list);
+    for user in user_list:
+        if user.gender == 'Male':
+            maleCount += 1;
+        elif user.gender == 'Female':
+            femaleCount += 1;
+    missingMale = (int)(n/2) - maleCount;
+    missingFemale = (int)(n/2) - femaleCount;
+    randomGenderList = [];
+    j = 0;    
+    for j in range(missingMale):
+        randomGenderList.append('Male');
+    j =0;
+    for j in range(missingFemale):
+        randomGenderList.append('Female');
+    shuffle(randomGenderList);
+    user = '';
+    for user in user_list:
+        if user.gender is None:
+            user.gender = randomGenderList.pop();
+    return user_list;
+    
 def calculate_features(user_list):
     '''
     Calculates the features for each user in user_list
@@ -119,7 +180,10 @@ def calculate_features(user_list):
         features = []
         features.append(dataStructures.AverageTweetLengthFeature(user))
         features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
+        features.append(dataStructures.NumberOfMultiTweetsFeature(user))
+        features.append(dataStructures.CountRetweet(user))
         features.append(dataStructures.CountLanguageUsed(user))
+        features.append(dataStructures.CountRegions(user))
         features.append(dataStructures.AgeOccupation(user))
 
         user_dict = {}
@@ -132,8 +196,15 @@ def calculate_features(user_list):
             tweet_features = []
             tweetTB = TextBlob(tweet.rawText)
 
-            tweet_features.append(dataStructures.CountCategoricalWords(tweet))
+            tweet_features.append(dataStructures.CapitalizationFeature(tweet))
+            # tweet_features.append(dataStructures.POSTagging(tweetTB))
             tweet_features.append(dataStructures.CountPersonalReferences(tweetTB))
+            tweet_features.append(dataStructures.CountPunctuations(tweetTB))
+            tweet_features.append(dataStructures.CountHashTags(tweetTB))
+            tweet_features.append(dataStructures.CountEmoticon(tweetTB))
+            tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
+            tweet_features.append(dataStructures.CountMisspelledWords(tweetTB))
+            tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
             for tweet_feature in tweet_features:
                 key = tweet_feature.getKey()
@@ -289,10 +360,10 @@ def main():
     return
 
     # Filter out non-whitelist features
-    gender_features = _filterFeatures(gender_whitelist, gender_features)
-    education_features = _filterFeatures(education_whitelist, education_features)
-    age_features = _filterFeatures(age_whitelist, age_features)
-    age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
+    # gender_features = _filterFeatures(gender_whitelist, gender_features)
+    # education_features = _filterFeatures(education_whitelist, education_features)
+    # age_features = _filterFeatures(age_whitelist, age_features)
+    # age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     # Test the accuracy
     _testAccuracy('gender', user_genders, gender_features)
