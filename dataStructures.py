@@ -136,35 +136,71 @@ class NumberOfTimesOthersMentionedFeature(Feature):
             val += len(re.findall(comp_regex, tweet.rawText))
         return val
 
-class POSTagging(Feature):
-	'''
-	POSTagging: returns Part of Speech tagging for the tweet
-	'''
-	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+class CountNouns(Feature):
+    '''
+    CountNouns : Counts the number of nouns in the tweet
+    '''
+    def __init__(self,tweetTB):
+        self.tags = tweetTB.tags;
+        
+    def getKey(self):
+        return 'CountNouns';
+        
+    def getValue(self):
+        count = 0;
+        for (word,tag) in self.tags:
+            if tag == 'NN':
+                count += 1;
+        return count;
 
-	def getKey(self):
-		return 'POSTagging';
+class CountVerbs(Feature):
+    '''
+    CountVerbs : Counts the number of verbs in the tweet
+    '''
+    def __init__(self,tweetTB):
+        self.tags = tweetTB.tags;
+        
+    def getKey(self):
+        return 'CountVerbs';
+        
+    def getValue(self):
+        count = 0;
+        for (word,tag) in self.tags:
+            if tag == 'VBZ':
+                count += 1;
+        return count;
 
-	def getValue(self):
-		return self.tweetTB.tags;
+class CountAdjectives(Feature):
+    '''
+    CountAdjectives : Counts the number of adjectives in the tweet
+    '''
+    def __init__(self,tweetTB):
+        self.tags = tweetTB.tags;
+        
+    def getKey(self):
+        return 'CountAdjectives';
+        
+    def getValue(self):
+        count = 0;
+        for (word,tag) in self.tags:
+            if tag == 'JJ':
+                count += 1;
+        return count;
 
 class CountPersonalReferences(Feature):
 	'''
 	CountPersonalReferences: Counts the number of Personal References used
 	'''
-	def __init__(self, tweet):
-		self.tweet = tweet;
+	def __init__(self, tweetTB):
+		self.tags = tweetTB.tags;
 
 	def getKey(self):
 		return 'CountPersonalReferences';
 
 	def getValue(self):
-		listOfWords = list(self.tweet.tokens);
 		count = 0;
-		listOfPR = ['I','he','she','we','you','they'];
-		for word in listOfWords:
-			if word in listOfPR:
+		for (word,tag) in self.tags:
+			if tag == 'PRP$':
 				count += 1;
 		return count;
 
@@ -247,7 +283,7 @@ class CountMisspelledWords(Feature):
 	CountMisspelledWords: Counts the number of misspelled words in the tweet
 	'''
 	def __init__(self,tweetTB):
-		self.tweetTB = tweetTB;
+		self.tags = tweetTB.tags;
 
 	def getKey(self):
 		return 'CountMisspelledWords';
@@ -255,7 +291,7 @@ class CountMisspelledWords(Feature):
 	def getValue(self):
 		count = 0;
 		stopwordList = stopwords.words('english');
-		for (word,tag) in self.tweetTB.tags:
+		for (word,tag) in self.tags:
 			if not wordnet.synsets(word) and word.lower() not in stopwordList and tag != 'SYM':
 				count += 1;
 		return count;
