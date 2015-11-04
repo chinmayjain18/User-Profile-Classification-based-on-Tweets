@@ -72,6 +72,8 @@ def unpickle_from_filename(root, filename):
 def load_data(data_folder):
     user_list = []
     for root, sub_folders, files in os.walk(data_folder):
+        if root == ".DS_Store" or root == data_folder:
+            continue
         ngramsFile = check_for_file(files, 'ngrams.pickl')
         replacementsFile = check_for_file(files, 'replacements.pickl')
         transformsFile = check_for_file(files, 'transforms.pickl')
