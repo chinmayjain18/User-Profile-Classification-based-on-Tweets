@@ -172,7 +172,6 @@ class CountPunctuations(Feature):
 	'''
 	CountPunctuations: Counts the number of Punctuations
 	'''
-
 	def __init__(self, tweet):
 		self.tweet = tweet;
 
@@ -192,7 +191,6 @@ class CountHashTags(Feature):
 	'''
 	CountHashTags: Counts the number of HashTags in the tweet
 	'''
-
 	def __init__(self, tweet):
 		self.tweet = tweet;
 
@@ -212,7 +210,6 @@ class CountEmoticon(Feature):
 	'''
 	CountEmoticon:: Counts the number of emoticons in the tweet
 	'''
-
 	def __init__(self, tweetTB):
 		self.tweetTB = tweetTB;
 
@@ -231,19 +228,18 @@ class CountEmotionalWords(Feature):
 	'''
 	CountEmotionalWords: Counts the number of emotional words in the tweet
 	'''
-
 	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+         file = open('EmotionalWords.txt','r');
+         self.listOfWords = [word.lower() for word in (file.read()).split(',')];
+         self.tweetTB = tweetTB;
 
 	def getKey(self):
-		return 'CountEmotionalWords';
+         return 'CountEmotionalWords';
 
 	def getValue(self):
-		file = open('EmotionalWords.txt','r');
-		listOfWords = [word.lower() for word in (file.read()).split(',')];
 		count = 0;
 		for (word,tag) in self.tweetTB.tags:
-			if word in listOfWords:
+			if word in self.listOfWords:
 				count += 1;
 		return count;
 
@@ -251,7 +247,6 @@ class CountMisspelledWords(Feature):
 	'''
 	CountMisspelledWords: Counts the number of misspelled words in the tweet
 	'''
-
 	def __init__(self,tweetTB):
 		self.tweetTB = tweetTB;
 
@@ -271,7 +266,6 @@ class FrequencyOfTweetingFeature(Feature):
     FrequencyOfTweetingFeature: Builds histogram broken into times when user tweeted
     Returns: dictionary of features with how many times the user tweeted in that interval
     '''
-
     MINUTE_INTERVAL = 30.0 # The size of the histogram buckets in minutes
 
     def __init__(self, user):
