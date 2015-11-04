@@ -104,38 +104,44 @@ def load_data(data_folder):
     return user_list
 
 def calculate_features(user_list):
-
-    # Add features to array
+    '''
+    Calculates the features for each user in user_list
+    Args:
+        user_list: List of users
+    Returns:
+        calculated_features: list of dictionaries of features for each user
+        in user_list in the same order as user_list
+    '''
     calculated_features = []
 
     for user in user_list:
 
-        avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
-        num_user_mention = dataStructures.NumberOfTimesOthersMentionedFeature(user)
-        num_languages = dataStructures.CountLanguageUsed(user)
+        features = []
+        features.append(dataStructures.AverageTweetLengthFeature(user))
+        features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
+        features.append(dataStructures.CountLanguageUsed(user))
 
         user_dict = {}
-        user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
-        user_dict[num_user_mention.getKey()] = num_user_mention.getValue()
-        user_dict[num_languages.getKey()] = num_languages.getValue()
+        for feature in features:
+            user_dict[feature.getKey()] = feature.getValue()
 
-        count, count_personal_sum = 0, 0
-        count_key, count_personal_sum_key = "", ""
-
+        tweet_dict = {}
         for tweet in user.tweets:
-            count_categorical_words = dataStructures.CountCategoricalWords(tweet)
-            count += count_categorical_words.getValue()
-            count_key = count_categorical_words.getKey()
-            tweetTB = TextBlob(tweet.rawText)
-            count_personal = dataStructures.CountPersonalReferences(tweetTB)
-            count_personal_sum += count_personal.getValue()
-            count_personal_sum_key = count_personal.getKey()
-            #array.
-            #pos_tag = dataStructures.POSTagging(tweetTB)
-            #user_dict[pos_tag.getKey()] = pos_tag.getValue()
 
-        user_dict[count_key] = count
-        user_dict[count_personal_sum_key] = count_personal_sum
+            tweet_features = []
+            tweetTB = TextBlob(tweet.rawText)
+
+            tweet_features.append(dataStructures.CountCategoricalWords(tweet))
+            tweet_features.append(dataStructures.CountPersonalReferences(tweetTB))
+
+            for tweet_feature in tweet_features:
+                key = tweet_feature.getKey()
+                if not key in tweet_dict.keys():
+                    tweet_dict[key] = 0
+                tweet_dict[key] += tweet_feature.getValue()
+
+        # Merge tweet-level dic (summed) values into user dic
+        user_dict.update(tweet_dict)
 
         # Merge in time vectors from that feature
         time_vector_feature = dataStructures.FrequencyOfTweetingFeature(user)
@@ -166,8 +172,10 @@ def main():
 
     user_genders = []
     gender_features = []
+
     user_educations = []
     education_features = []
+
     for user, user_feature in zip(user_list, calculated_features):
         if user.gender == "Male" or user.gender == "Female":
             user_genders.append(user.gender)
@@ -178,10 +186,13 @@ def main():
 
     training_genders = user_genders[:30]
     test_genders = user_genders[30:]
+
     training_gender_features = gender_features[:30]
     test_gender_features = gender_features[30:]
+
     training_educations = user_educations[:30]
     test_educations = user_educations[30:]
+
     training_education_features = education_features[:30]
     test_education_features = education_features[30:]
 
