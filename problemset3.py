@@ -230,9 +230,9 @@ def main():
     acc = classifier.get_SVM_Acc(training_age_features, training_ages, test_age_features, test_ages)
     acc_nb = classifier.get_Naivebayes_Acc(training_age_features, training_ages, test_age_features, test_ages)
     acc_lr = classifier.get_LinearRegression_Acc(training_age_features, training_ages, test_age_features, test_ages)
-    print('\t{0} education accuracy: {1}'.format('SVM', acc))
-    print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
-    print('\t{0} education accuracy: {1}'.format('Linear Regression', acc_lr))
+    print('\t{0} age accuracy: {1}'.format('SVM', acc))
+    print('\t{0} age accuracy: {1}'.format('Naive Bayes', acc_nb))
+    print('\t{0} age accuracy: {1}'.format('Linear Regression', acc_lr))
 
 if __name__ == '__main__':
     main()
