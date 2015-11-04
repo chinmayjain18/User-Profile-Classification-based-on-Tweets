@@ -401,3 +401,25 @@ class CountRegions(Feature):
 		
 	def getValue(self):
 		return len(self.user.regions);
+
+class AgeOccupation(Feature):
+    '''
+    AgeOccupation : Returns the numeric metric value for age by looking 
+    at the occupation
+    '''
+    def __init__(self,user):
+        self.user = user;
+        
+    def getKey(self):
+        return 'Occupation';
+        
+    def getValue(self):
+        occupation = self.user.occupation;
+        if occupation is not None:
+            occupation = occupation.lower();
+            oList = occupation.split();
+            if 'student' in oList:
+                return 1;
+        else:
+            return -1;
+        return 0;
