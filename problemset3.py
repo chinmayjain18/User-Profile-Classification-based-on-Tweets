@@ -274,6 +274,17 @@ def main():
         print(len(age_bucket_features))
         print(user_ages)
 
+    ## Test each feature one at a time for everything
+    # feature_keys = gender_features[0].keys()
+    # for feature_name in feature_keys:
+    #     print('\n' + feature_name)
+    #     # Test the accuracy
+    #     _testAccuracy('gender', user_genders, _filterFeatures([feature_name], gender_features))
+    #     _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
+    #     _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
+    #     _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
+    # return
+
     # Filter out non-whitelist features
     gender_features = _filterFeatures(gender_whitelist, gender_features)
     education_features = _filterFeatures(education_whitelist, education_features)
