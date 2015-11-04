@@ -196,7 +196,7 @@ def _filterFeatures(whitelist, features_list):
     '''
     reduced_list = []
     for features in features_list:
-        reduced_list.append({ key: features_list[x][key] for key in whitelist })
+        reduced_list.append({ key: features[key] for key in whitelist })
     return reduced_list
 
 def main():
