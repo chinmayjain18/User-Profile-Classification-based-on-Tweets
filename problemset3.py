@@ -190,6 +190,7 @@ def calculate_features(user_list):
         features.append(dataStructures.CountRegions(user))
         features.append(dataStructures.AgeOccupation(user))
         features.append(dataStructures.CountReplacements(user))
+        features.append(dataStructures.CountTweets(user))
 
         user_dict = {}
         for feature in features:
