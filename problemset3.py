@@ -180,7 +180,10 @@ def calculate_features(user_list):
         features = []
         features.append(dataStructures.AverageTweetLengthFeature(user))
         features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
+        features.append(dataStructures.NumberOfMultiTweetsFeature(user))
+        features.append(dataStructures.CountRetweet(user))
         features.append(dataStructures.CountLanguageUsed(user))
+        features.append(dataStructures.CountRegions(user))
         features.append(dataStructures.AgeOccupation(user))
 
         user_dict = {}
@@ -193,8 +196,15 @@ def calculate_features(user_list):
             tweet_features = []
             tweetTB = TextBlob(tweet.rawText)
 
-            tweet_features.append(dataStructures.CountCategoricalWords(tweet))
+            tweet_features.append(dataStructures.CapitalizationFeature(tweet))
+            # tweet_features.append(dataStructures.POSTagging(tweetTB))
             tweet_features.append(dataStructures.CountPersonalReferences(tweetTB))
+            tweet_features.append(dataStructures.CountPunctuations(tweetTB))
+            tweet_features.append(dataStructures.CountHashTags(tweetTB))
+            tweet_features.append(dataStructures.CountEmoticon(tweetTB))
+            tweet_features.append(dataStructures.CountEmotionalWords(tweetTB))
+            tweet_features.append(dataStructures.CountMisspelledWords(tweetTB))
+            tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
             for tweet_feature in tweet_features:
                 key = tweet_feature.getKey()
@@ -347,10 +357,10 @@ def main():
     # return
 
     # Filter out non-whitelist features
-    gender_features = _filterFeatures(gender_whitelist, gender_features)
-    education_features = _filterFeatures(education_whitelist, education_features)
-    age_features = _filterFeatures(age_whitelist, age_features)
-    age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
+    # gender_features = _filterFeatures(gender_whitelist, gender_features)
+    # education_features = _filterFeatures(education_whitelist, education_features)
+    # age_features = _filterFeatures(age_whitelist, age_features)
+    # age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     # Test the accuracy
     _testAccuracy('gender', user_genders, gender_features)
