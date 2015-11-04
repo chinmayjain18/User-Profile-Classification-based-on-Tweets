@@ -6,6 +6,8 @@ import sys, os
 
 from textblob import TextBlob
 
+import argparse
+
 from enum import Enum
 
 # Possible classes for education
@@ -100,20 +102,22 @@ def load_data(data_folder):
     return user_list
 
 def calculate_features(user_list):
+
     # Add features to array
     calculated_features = []
+
     for user in user_list:
-        user_dict = {}
+
         avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
         num_user_mention = dataStructures.NumberOfTimesOthersMentionedFeature(user)
+
+        user_dict = {}
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
         user_dict[num_user_mention.getKey()] = num_user_mention.getValue()
 
-        #TODO Ugly.
-        count = 0
-        count_key = ""
-        count_personal_sum = 0
-        count_personal_sum_key = ""
+        count, count_personal_sum = 0, 0
+        count_key, count_personal_sum_key = "", ""
+
         for tweet in user.tweets:
             count_categorical_words = dataStructures.CountCategoricalWords(tweet)
             count += count_categorical_words.getValue()
@@ -135,11 +139,17 @@ def calculate_features(user_list):
 
         # Add the user dictionary to the features list.
         calculated_features.append(user_dict)
+
     return calculated_features
 
 def main():
-    data_folder = sys.argv[1]
-    user_list = load_data(data_folder)
+
+    parser = argparse.ArgumentParser(description='Problem Set 3')
+    parser.add_argument('data_folder', help='path to data folder')
+
+    args = parser.parse_args()
+
+    user_list = load_data(args.data_folder)
 
     calculated_features = calculate_features(user_list)
     print(len(calculated_features))
