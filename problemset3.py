@@ -153,6 +153,37 @@ def calculate_features(user_list):
 
     return calculated_features
 
+def _testAccuracy(display_type, classes, features):
+    '''
+    Tests the accuracy, prints results.
+    Args:
+        display_type: String value of type to be displayed in print message (eg. 'gender')
+        train_classes: list of user's classes to train on (eg. genders)
+        train_features: corrisponding list of user's computed features
+        test_classes: list of user's classes to test on (eg. genders)
+        test_features: corrisponding list of user's computed features
+    '''
+
+    ACC_STRING = '\t{1} {0} accuracy: {2}'
+    TEST_RATIO = 0.75
+    split_index = int(len(classes) * TEST_RATIO)
+
+    train_classes, test_classes = classes[:split_index], classes[split_index:]
+    train_features, test_features = features[:split_index], features[split_index:]
+
+    # SVM
+    acc = classifier.get_SVM_Acc(train_features, train_classes, test_features, test_classes)
+    print(ACC_STRING.format(display_type, 'SVM', acc))
+
+    # Naive Bayes
+    acc = classifier.get_Naivebayes_Acc(train_features, train_classes, test_features, test_classes)
+    print(ACC_STRING.format(display_type, 'Naive Bayes', acc))
+
+    # Linear Regression
+    acc = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
+    print(ACC_STRING.format(display_type, 'Linear Regression', acc))
+
+
 def main():
 
     parser = argparse.ArgumentParser(description='Problem Set 3')
@@ -196,44 +227,9 @@ def main():
             user_ages.append(user.year)
             age_features.append(user_feature)
 
-    training_genders = user_genders[:30]
-    test_genders = user_genders[30:]
-
-    training_gender_features = gender_features[:30]
-    test_gender_features = gender_features[30:]
-
-    training_educations = user_educations[:30]
-    test_educations = user_educations[30:]
-
-    training_education_features = education_features[:30]
-    test_education_features = education_features[30:]
-
-    training_ages = user_ages[:30]
-    test_ages = user_ages[30:]
-
-    training_age_features = age_features[:30]
-    test_age_features = age_features[30:]
-
-    acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
-    acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
-    acc_lr = classifier.get_LinearRegression_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
-    print('\t{0} gender accuracy: {1}'.format('SVM', acc))
-    print('\t{0} gender accuracy: {1}'.format('Naive Bayes', acc_nb))
-    print('\t{0} gender accuracy: {1}'.format('Linear Regression', acc_lr))
-
-    acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
-    acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
-    acc_lr = classifier.get_LinearRegression_Acc(training_education_features, training_educations, test_education_features, test_educations)
-    print('\t{0} education accuracy: {1}'.format('SVM', acc))
-    print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
-    print('\t{0} education accuracy: {1}'.format('Linear Regression', acc_lr))
-
-    acc = classifier.get_SVM_Acc(training_age_features, training_ages, test_age_features, test_ages)
-    acc_nb = classifier.get_Naivebayes_Acc(training_age_features, training_ages, test_age_features, test_ages)
-    acc_lr = classifier.get_LinearRegression_Acc(training_age_features, training_ages, test_age_features, test_ages)
-    print('\t{0} age accuracy: {1}'.format('SVM', acc))
-    print('\t{0} age accuracy: {1}'.format('Naive Bayes', acc_nb))
-    print('\t{0} age accuracy: {1}'.format('Linear Regression', acc_lr))
+    _testAccuracy('gender', user_genders, gender_features)
+    _testAccuracy('education', user_educations, education_features)
+    _testAccuracy('age', user_ages, age_features)
 
 if __name__ == '__main__':
     main()
