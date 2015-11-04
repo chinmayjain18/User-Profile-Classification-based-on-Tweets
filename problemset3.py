@@ -106,8 +106,10 @@ def calculate_features(user_list):
         user_dict = {}
         avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
         num_user_mention = dataStructures.NumberOfTimesOthersMentionedFeature(user)
+        num_languages = dataStructures.CountLanguageUsed(user)
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
         user_dict[num_user_mention.getKey()] = num_user_mention.getValue()
+        user_dict[num_languages.getKey()] = num_languages.getValue()
 
         #TODO Ugly.
         count = 0
