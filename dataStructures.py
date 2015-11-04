@@ -489,3 +489,16 @@ class Transforms(Feature):
 
     def getValue(self):
         return self.user.transforms;
+
+class CountTweets(Feature):
+    '''
+    CountTweets : Counts the number of tweets by the user
+    '''
+    def __init__(self,user):
+        self.user = user;
+        
+    def getKey(self):
+        return 'CountTweets';
+        
+    def getValue(self):
+        return len(self.user.tweets);
