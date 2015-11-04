@@ -2,7 +2,7 @@ import dataStructures
 import classifier
 
 import pickle
-import sys, os
+import os
 
 from textblob import TextBlob
 
@@ -176,17 +176,24 @@ def main():
     user_educations = []
     education_features = []
 
+    user_ages = []
+    age_features =[]
+
     for user, user_feature in zip(user_list, calculated_features):
         if user.gender == "Male":
             user_genders.append(0)
+            gender_features.append(user_feature)
         elif user.gender == "Female":
             user_genders.append(1)
-        else:
-            print(user.gender)
             gender_features.append(user_feature)
-        if user.education is not None:
+        else:
+            print("No gender.")
+        if user.education != None:
             user_educations.append(user.education)
             education_features.append(user_feature)
+        if user.year != None:
+            user_ages.append(user.year)
+            age_features.append(user_feature)
 
     training_genders = user_genders[:30]
     test_genders = user_genders[30:]
@@ -200,6 +207,12 @@ def main():
     training_education_features = education_features[:30]
     test_education_features = education_features[30:]
 
+    training_ages = user_ages[:30]
+    test_ages = user_ages[30:]
+
+    training_age_features = age_features[:30]
+    test_age_features = age_features[30:]
+
     acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     acc_lr = classifier.get_LinearRegression_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
@@ -210,6 +223,13 @@ def main():
     acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
     acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
     acc_lr = classifier.get_LinearRegression_Acc(training_education_features, training_educations, test_education_features, test_educations)
+    print('\t{0} education accuracy: {1}'.format('SVM', acc))
+    print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
+    print('\t{0} education accuracy: {1}'.format('Linear Regression', acc_lr))
+
+    acc = classifier.get_SVM_Acc(training_age_features, training_ages, test_age_features, test_ages)
+    acc_nb = classifier.get_Naivebayes_Acc(training_age_features, training_ages, test_age_features, test_ages)
+    acc_lr = classifier.get_LinearRegression_Acc(training_age_features, training_ages, test_age_features, test_ages)
     print('\t{0} education accuracy: {1}'.format('SVM', acc))
     print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
     print('\t{0} education accuracy: {1}'.format('Linear Regression', acc_lr))
