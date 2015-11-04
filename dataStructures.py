@@ -211,15 +211,14 @@ class CountEmoticon(Feature):
 	CountEmoticon:: Counts the number of emoticons in the tweet
 	'''
 	def __init__(self, tweetTB):
-		self.tweetTB = tweetTB;
+           self.tags = tweetTB.tags;
 
 	def getKey(self):
 		return 'CountEmoticon';
 
 	def getValue(self):
 		count = 0;
-		posTagList = self.tweetTB.tags;
-		for (word,tag) in posTagList:
+		for (word,tag) in self.tags:
 			if tag == 'SYM':
 				count += 1;
 		return count;
@@ -231,14 +230,14 @@ class CountEmotionalWords(Feature):
 	def __init__(self, tweetTB):
          file = open('EmotionalWords.txt','r');
          self.listOfWords = [word.lower() for word in (file.read()).split(',')];
-         self.tweetTB = tweetTB;
+         self.tags = tweetTB.tags;
 
 	def getKey(self):
          return 'CountEmotionalWords';
 
 	def getValue(self):
 		count = 0;
-		for (word,tag) in self.tweetTB.tags:
+		for (word,tag) in self.tags:
 			if word in self.listOfWords:
 				count += 1;
 		return count;
