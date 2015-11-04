@@ -5,8 +5,6 @@ Defines the User, Tweet, and Feature classes we will be using
 
 import re
 import string
-from nltk.corpus import wordnet
-from nltk.corpus import stopwords
 import datetime
 import math
 
@@ -420,7 +418,10 @@ class CountReplacements(Feature):
         return 'Replacements';
 
     def getValue(self):
-        return len(self.user.replacements);
+        if self.user.replacements is None:
+            return 0
+        else:
+            return len(self.user.replacements)
 
 class Transforms(Feature):
     '''
