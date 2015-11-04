@@ -68,7 +68,38 @@ def get_Naivebayes_Acc(a,b,c,d):
 
    return acc
    
+def get_LinearRegression_Acc(a,b,c,d):
+
+   # Convert features into vector of numbers
+   from sklearn.feature_extraction import DictVectorizer   
+   v1 = DictVectorizer().fit(a+c) 
+  
+   #define training data
+   X_data_tr = v1.transform(a)
+   Y_data_tr = b
    
+   #define test data
+   X_data_ts = v1.transform(c)
+   Y_data_ts = d
+
+
+   #import Linear Regression classifier   
+   import numpy as np
+   from sklearn import linear_model
+   regr = linear_model.LinearRegression()
+   regr.fit(X_data_tr,Y_data_tr)
+   
+   #Use trained model to classify test data
+   Y_pred = regr.predict(X_data_ts)
+   # Convert into nearest integer 
+   Y_pred = np.rint(Y_pred)
+
+   acc = (Y_pred==Y_data_ts).mean()
+   
+   #from sklearn.metrics import confusion_matrix
+   #print(confusion_matrix(Y_data_ts,Y_pred))
+
+   return acc
    
    
 '''

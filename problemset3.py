@@ -6,6 +6,8 @@ import sys, os
 
 from textblob import TextBlob
 
+import argparse
+
 from enum import Enum
 
 # Possible classes for education
@@ -100,22 +102,24 @@ def load_data(data_folder):
     return user_list
 
 def calculate_features(user_list):
+
     # Add features to array
     calculated_features = []
+
     for user in user_list:
-        user_dict = {}
+
         avg_tweet_len = dataStructures.AverageTweetLengthFeature(user)
         num_user_mention = dataStructures.NumberOfTimesOthersMentionedFeature(user)
         num_languages = dataStructures.CountLanguageUsed(user)
+
+        user_dict = {}
         user_dict[avg_tweet_len.getKey()] = avg_tweet_len.getValue()
         user_dict[num_user_mention.getKey()] = num_user_mention.getValue()
         user_dict[num_languages.getKey()] = num_languages.getValue()
 
-        #TODO Ugly.
-        count = 0
-        count_key = ""
-        count_personal_sum = 0
-        count_personal_sum_key = ""
+        count, count_personal_sum = 0, 0
+        count_key, count_personal_sum_key = "", ""
+
         for tweet in user.tweets:
             count_categorical_words = dataStructures.CountCategoricalWords(tweet)
             count += count_categorical_words.getValue()
@@ -137,15 +141,26 @@ def calculate_features(user_list):
 
         # Add the user dictionary to the features list.
         calculated_features.append(user_dict)
+
     return calculated_features
 
 def main():
-    data_folder = sys.argv[1]
-    user_list = load_data(data_folder)
+
+    parser = argparse.ArgumentParser(description='Problem Set 3')
+    parser.add_argument('data_folder', help='path to data folder')
+    parser.add_argument('-v', help='verbose mode')
+
+    args = parser.parse_args()
+
+    verbose_mode = bool(args.v)
+
+    user_list = load_data(args.data_folder)
 
     calculated_features = calculate_features(user_list)
-    print(len(calculated_features))
-    print(calculated_features)
+
+    if verbose_mode:
+        print(len(calculated_features))
+        print(calculated_features)
 
     user_genders = []
     gender_features = []
@@ -170,13 +185,13 @@ def main():
 
     acc = classifier.get_SVM_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
     acc_nb = classifier.get_Naivebayes_Acc(training_gender_features, training_genders, test_gender_features, test_genders)
-    print (acc)
-    print(acc_nb)
+    print('\t{0} gender accuracy: {1}'.format('SVM', acc))
+    print('\t{0} gender accuracy: {1}'.format('Naive Bayes', acc_nb))
 
     acc = classifier.get_SVM_Acc(training_education_features, training_educations, test_education_features, test_educations)
     acc_nb = classifier.get_Naivebayes_Acc(training_education_features, training_educations, test_education_features, test_educations)
-    print (acc)
-    print(acc_nb)
+    print('\t{0} education accuracy: {1}'.format('SVM', acc))
+    print('\t{0} education accuracy: {1}'.format('Naive Bayes', acc_nb))
 
 if __name__ == '__main__':
     main()
