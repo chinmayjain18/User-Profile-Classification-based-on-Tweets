@@ -183,6 +183,8 @@ def _testAccuracy(display_type, classes, features):
     acc = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
     print(ACC_STRING.format(display_type, 'Linear Regression', acc))
 
+    print("")
+
 def _filterFeatures(whitelist, features_list):
     '''
     Filters out every features that isn't on the whitelist
@@ -234,8 +236,6 @@ def main():
         elif user.gender == "Female":
             user_genders.append(1)
             gender_features.append(user_feature)
-        else:
-            print("No gender.")
         if user.education != None:
             user_educations.append(user.education)
             education_features.append(user_feature)
