@@ -409,9 +409,9 @@ class Ngrams(Feature):
     def getValue(self):
         return self.user.ngrams
 
-class Replacements(Feature):
+class CountReplacements(Feature):
     '''
-    Replacements : Returns the replacements feature from the pickled files
+    Replacements : Returns the number of replacements from the pickled files
     '''
     def __init__(self,user):
         self.user = user;
@@ -420,7 +420,7 @@ class Replacements(Feature):
         return 'Replacements';
 
     def getValue(self):
-        return self.user.replacements;
+        return len(self.user.replacements);
 
 class Transforms(Feature):
     '''

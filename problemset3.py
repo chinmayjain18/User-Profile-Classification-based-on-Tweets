@@ -185,6 +185,7 @@ def calculate_features(user_list):
         features.append(dataStructures.CountLanguageUsed(user))
         features.append(dataStructures.CountRegions(user))
         features.append(dataStructures.AgeOccupation(user))
+        features.append(dataStructures.CountReplacements(user))
 
         user_dict = {}
         for feature in features:
