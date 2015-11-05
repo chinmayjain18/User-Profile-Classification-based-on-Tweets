@@ -232,6 +232,66 @@ def calculate_features(user_list):
 
     return calculated_features
 
+def _testAllFeatures(classes, features):
+    num_features = len(features[0].keys())
+    results = []
+    for n in range(1, num_features+1):
+        results += _testNFeaturesTogether(n, classes, features)
+    results.sort(key=lambda x: x[1])
+    results.reverse()
+    for x in results[:20]:
+        print(x)
+
+def _testNFeaturesTogether(n, classes, features):
+    '''
+    Test N features together in the classifier and sort's their performance
+    '''
+
+    # Split into train and test
+    TEST_RATIO = 0.75
+    split_index = int(len(classes) * TEST_RATIO)
+
+    train_classes, test_classes = classes[:split_index], classes[split_index:]
+    train_features, test_features = features[:split_index], features[split_index:]
+
+    # Test every combination of features
+    feature_names = features[0].keys()
+    results = []
+
+    import itertools
+    feature_combinations = itertools.combinations(feature_names, n)
+    for feature_combination in feature_combinations:
+
+        # filter train and test features with this combination
+        train_f = _filterFeatures(feature_combination, train_features)
+        test_f = _filterFeatures(feature_combination, test_features)
+
+        acc = []
+        acc.append(classifier.get_SVM_Acc(train_f, train_classes, test_f, test_classes))
+        acc.append(classifier.get_Naivebayes_Acc(train_f, train_classes, test_f, test_classes))
+        acc.append(classifier.get_LinearRegression_Acc(train_f, train_classes, test_f, test_classes))
+
+        best_perf = max(acc)
+        best_classifier = ' SVM'
+        if acc.index(best_perf) == 1:
+            best_classifier = ' NB'
+        elif acc.index(best_perf) == 2:
+            best_classifier = ' LR'
+
+        tmp = ""
+        for s in feature_combination:
+            tmp = tmp + " " + s
+        results.append( (tmp + best_classifier, best_perf) )
+
+    return results
+    # Find best results and print top 5
+    # results.sort(key=lambda x: x[1])
+    # results.reverse()
+
+    # for x in results[:5]:
+    #     print(x[0] + ': ' +str(x[1]))
+    # print("")
+
 def _testAccuracy(display_type, classes, features):
     '''
     Tests the accuracy, prints results.
@@ -400,10 +460,19 @@ def main():
     age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     # Test the accuracy
-    _testAccuracy('gender', user_genders, gender_features)
-    _testAccuracy('education', user_educations, education_features)
-    _testAccuracy('age', user_ages, age_features)
-    _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
+    # _testAccuracy('gender', user_genders, gender_features)
+    # _testAccuracy('education', user_educations, education_features)
+    # _testAccuracy('age', user_ages, age_features)
+    # _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
+
+    # Find the best combinations
+    # _testNFeaturesTogether(2, user_genders, gender_features)
+    # _testNFeaturesTogether(2, user_educations, education_features)
+    # _testNFeaturesTogether(2, user_ages, age_features)
+    # _testNFeaturesTogether(2, user_age_buckets, age_bucket_features)
+
+    # Find the best everything
+    _testAllFeatures(user_genders, gender_features)
 
 if __name__ == '__main__':
     main()
