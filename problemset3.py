@@ -379,11 +379,11 @@ def predict_test_lr(display_type, classes, features):
         test_features: corrisponding list of user's computed features
     '''
 
-    TEST_RATIO = 0.75
-    split_index = int(len(classes) * TEST_RATIO)
+    #TEST_RATIO = 0.75
+    #split_index = int(len(classes) * TEST_RATIO)
 
-    train_classes, test_classes = classes[:split_index], classes[split_index:]
-    train_features, test_features = features[:split_index], features[split_index:]
+    train_classes, test_classes = classes[:-8], classes[-8:]
+    train_features, test_features = features[:-8], features[-8:]
 
     # SVM
     y_pred = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
@@ -536,8 +536,10 @@ def main():
     age_bucket_ypred = predict_test_lr('age_buckets', user_age_buckets, age_bucket_features)
 
     usernames = []
-    for i in range(32,40):
-        usernames.append(user_list[i].id)
+    for user in user_list[-8:]:
+        usernames.append(user.id)
+    print(len(usernames))
+    print(len(gender_ypred))
     classifier.createTextFiles(usernames, gender_ypred, "gender")
     classifier.createTextFiles(usernames, education_ypred, "education")
     classifier.createTextFiles(usernames, age_ypred, "age")
