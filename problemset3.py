@@ -232,6 +232,50 @@ def calculate_features(user_list):
 
     return calculated_features
 
+def _testNFeaturesTogether(n, display_type, classes, features):
+    '''
+    Test N features together in the classifier and sort's their performance
+    '''
+
+    # Split into train and test
+    TEST_RATIO = 0.75
+    split_index = int(len(classes) * TEST_RATIO)
+
+    train_classes, test_classes = classes[:split_index], classes[split_index:]
+    train_features, test_features = features[:split_index], features[split_index:]
+
+    # Test every combination of features
+    feature_names = features[0].keys()
+    results = []
+
+    import itertools
+    feature_combinations = itertools.combinations(feature_names, n)
+    for feature_combination in feature_combinations:
+
+        # filter train and test features with this combination
+        train_f = _filterFeatures(feature_combination, features)
+        test_f = _filterFeatures(feature_combination, features)
+
+        acc = []
+        acc.append(classifier.get_SVM_Acc(train_features, train_classes, test_features, test_classes))
+        acc.append(classifier.get_Naivebayes_Acc(train_features, train_classes, test_features, test_classes))
+        acc.append(classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes))
+
+        best_perf = max(acc)
+        best_classifier = ' SVM'
+        if acc.index(best_perf) == 1:
+            best_classifier = ' NB'
+        else if acc.index(best_perf) == 2:
+            best_classifier = ' LR'
+
+        results.append( (feature_combination + best_classifier, best_perf) )
+
+    # Find best results and print top 5
+    results.sort(key=lambda x: x[1])
+    results.reverse()
+    for x in results[:5]:
+        print(x[0] + ': ' +str(x[1]))
+
 def _testAccuracy(display_type, classes, features):
     '''
     Tests the accuracy, prints results.
@@ -384,10 +428,13 @@ def main():
     # age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     # Test the accuracy
-    _testAccuracy('gender', user_genders, gender_features)
-    _testAccuracy('education', user_educations, education_features)
-    _testAccuracy('age', user_ages, age_features)
-    _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
+    # _testAccuracy('gender', user_genders, gender_features)
+    # _testAccuracy('education', user_educations, education_features)
+    # _testAccuracy('age', user_ages, age_features)
+    # _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
+
+    # Find the best combinations
+    _testNFeaturesTogether(2, 'gender', user_genders, gender_features)
 
 if __name__ == '__main__':
     main()
