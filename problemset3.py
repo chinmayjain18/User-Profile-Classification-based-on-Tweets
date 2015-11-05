@@ -376,16 +376,26 @@ def main():
         FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
 
     gender_whitelist = [
-        #'AverageTweetLength',
+        'AverageTweetLength',
         #'NumberOfTimesOthersMentionedFeature',
-        'CountNouns'
-    ] + FrequencyOfTweetingFeature_NAMES
+        #'CountNouns',
+        'CountEmotionalWords',
+        #'CountNouns',
+        'CountTweets',
+        #'CountEmoticon',
+        'CountLanguageUsed'
+        #'Replacements',
+        #'CountRegions'
+    ] #+ FrequencyOfTweetingFeature_NAMES
 
     education_whitelist = [
         #'AverageTweetLength',
         #'CapitalizationFeature',
         'CountCategoricalWords',
-        'CountNouns',
+        #'CountNouns',
+        #'CountPunctuations',
+        'CountTweets',
+        'Occupation',
         #'CountEmotionalWords',
         #'CountHashTags',
         #'CountTweets',
@@ -404,6 +414,9 @@ def main():
     age_bucket_whitelist = [
         'AverageTweetLength',
         'CountHashTags',
+        'Occupation',
+        #'CountCategoricalWords',
+        'CountRetweet',
     ]# + FrequencyOfTweetingFeature_NAMES
 
     user_genders = []
@@ -474,10 +487,10 @@ def main():
     age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     # Test the accuracy
-    # _testAccuracy('gender', user_genders, gender_features)
-    # _testAccuracy('education', user_educations, education_features)
-    # _testAccuracy('age', user_ages, age_features)
-    # _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
+    _testAccuracy('gender', user_genders, gender_features)
+    _testAccuracy('education', user_educations, education_features)
+    _testAccuracy('age', user_ages, age_features)
+    _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
 
     # Find the best combinations
     # _testNFeaturesTogether(2, user_genders, gender_features)
@@ -487,11 +500,14 @@ def main():
 
     # Find the best everything
     #_testAllFeatures(user_genders, gender_features)
+<<<<<<< HEAD
 
     trainClassifier('gender', classifier.get_SVM, user_genders, gender_features)
     trainClassifier('education', classifier.get_Naivebayes, user_educations, education_features)
     trainClassifier('age', classifier.get_Naivebayes, user_ages, age_features)
     trainClassifier('age_buckets', classifier.get_LinearRegression, user_age_buckets, age_bucket_features)
+=======
+>>>>>>> origin/master
 
 if __name__ == '__main__':
     main()
