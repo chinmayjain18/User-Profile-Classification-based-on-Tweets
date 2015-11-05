@@ -303,7 +303,7 @@ def _testAccuracy(display_type, classes, features):
         test_features: corrisponding list of user's computed features
     '''
 
-    ACC_STRING = '\t{1} {0} accuracy: {2}'
+    ACC_STRING = '\t{0} accuracy: {1}'
     TEST_RATIO = 0.75
     split_index = int(len(classes) * TEST_RATIO)
 
@@ -311,22 +311,30 @@ def _testAccuracy(display_type, classes, features):
     train_features, test_features = features[:split_index], features[split_index:]
 
     # SVM
-    acc = classifier.get_SVM_Acc(train_features, train_classes, test_features, test_classes)
-    print(ACC_STRING.format(display_type, 'SVM', acc))
+    acc1 = classifier.get_SVM_Acc(display_type,train_features, train_classes, test_features, test_classes)
 
     # Naive Bayes
-    acc = classifier.get_Naivebayes_Acc(train_features, train_classes, test_features, test_classes)
-    print(ACC_STRING.format(display_type, 'Naive Bayes', acc))
+    acc2 = classifier.get_Naivebayes_Acc(display_type,train_features, train_classes, test_features, test_classes)
 
     # Linear Regression
-    acc = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
-    print(ACC_STRING.format(display_type, 'Linear Regression', acc))
+    acc3 = classifier.get_LinearRegression_Acc(display_type,train_features, train_classes, test_features, test_classes)
+    
+    acc = max(acc1,acc2,acc3)
+    print(ACC_STRING.format(display_type, acc))
 
-    # Save the classifier in a pickle file
-    filename = display_type + '.pickle'
-    f = open(filename, 'wb')
-    pickle.dump(classifier, f)
-    f.close()
+    print("")
+    
+def trainClassifier(display_type, classifier_function, classes, features):
+    '''
+    Tests the accuracy, prints results.
+    Args:
+        display_type: String value of type to be displayed in print message (eg. 'gender')
+        train_classes: list of user's classes to train on (eg. genders)
+        train_features: corrisponding list of user's computed features
+        test_classes: list of user's classes to test on (eg. genders)
+        test_features: corrisponding list of user's computed features
+    '''
+    classifier_function(features, classes, features, classes,display_type)
 
     print("")
 
@@ -478,7 +486,12 @@ def main():
     # _testNFeaturesTogether(2, user_age_buckets, age_bucket_features)
 
     # Find the best everything
-    _testAllFeatures(user_genders, gender_features)
+    #_testAllFeatures(user_genders, gender_features)
+
+    trainClassifier('gender', classifier.get_SVM, user_genders, gender_features)
+    trainClassifier('education', classifier.get_Naivebayes, user_educations, education_features)
+    trainClassifier('age', classifier.get_Naivebayes, user_ages, age_features)
+    trainClassifier('age_buckets', classifier.get_LinearRegression, user_age_buckets, age_bucket_features)
 
 if __name__ == '__main__':
     main()

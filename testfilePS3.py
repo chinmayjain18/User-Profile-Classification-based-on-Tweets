@@ -40,7 +40,7 @@ def main():
     age_classifier = pickle.load(f)
     f.close()
     
-    f = open('age_bracket.pickle', 'rb')
+    f = open('age_buckets.pickle', 'rb')
     age_buckets_classifier = pickle.load(f)
     f.close()
     
@@ -79,11 +79,46 @@ def main():
             elif user.year <= 1977:
                 user_age_buckets.append(2)
                 age_bucket_features.append(user_feature)
+                
+    FrequencyOfTweetingFeature_NAMES = []
+    for x in range(0, 48):
+        FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
 
-    gender_features = problemset3._filterFeatures(problemset3.gender_whitelist, gender_features)
-    education_features = problemset3._filterFeatures(problemset3.education_whitelist, education_features)
-    age_features = problemset3._filterFeatures(problemset3.age_whitelist, age_features)
-    age_bucket_features = problemset3._filterFeatures(problemset3.age_bucket_whitelist, age_bucket_features)
+    gender_whitelist = [
+        #'AverageTweetLength',
+        #'NumberOfTimesOthersMentionedFeature',
+        'CountNouns'
+    ] + FrequencyOfTweetingFeature_NAMES
+
+    education_whitelist = [
+        #'AverageTweetLength',
+        #'CapitalizationFeature',
+        'CountCategoricalWords',
+        'CountNouns',
+        #'CountEmotionalWords',
+        #'CountHashTags',
+        #'CountTweets',
+        #'CountReplacements'
+    ] #+ FrequencyOfTweetingFeature_NAMES
+
+    age_whitelist = [
+        #'AverageTweetLength',
+        'CountCategoricalWords',
+        'CountNouns',
+        #'CapitalizationFeature',
+        #'CountHashTags'
+    ] #+ FrequencyOfTweetingFeature_NAMES
+
+
+    age_bucket_whitelist = [
+        'AverageTweetLength',
+        'CountHashTags',
+    ]# + FrequencyOfTweetingFeature_NAMES
+
+    gender_features = problemset3._filterFeatures(gender_whitelist, gender_features)
+    education_features = problemset3._filterFeatures(education_whitelist, education_features)
+    age_features = problemset3._filterFeatures(age_whitelist, age_features)
+    age_bucket_features = problemset3._filterFeatures(age_bucket_whitelist, age_bucket_features)
     
     testAccuracy(gender_classifier,'gender', gender_features)
     testAccuracy(education_classifier,'education', education_features)

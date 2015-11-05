@@ -8,6 +8,31 @@ It takes four parameters as input:
     c(list) = test data which is dictionay of features
     d(np.array) = ground truth of test data
 '''
+import pickle
+
+def saveClassifier(classifier,display_type):
+    # Save the classifier in a pickle file
+    filename = display_type + '.pickle'
+    f = open(filename, 'wb')
+    pickle.dump(classifier, f)
+    f.close()
+    
+def get_SVM(a,b,c,d,display_name):
+    # Convert features into vector of numbers
+    from sklearn.feature_extraction import DictVectorizer
+    v1 = DictVectorizer().fit(a+c)
+
+    #define training data
+    X_data_tr = v1.transform(a)
+    Y_data_tr = b
+
+    #import linear SVM
+    from sklearn.svm import LinearSVC
+
+    #generate model
+    svm_Classifier = LinearSVC().fit(X_data_tr, Y_data_tr)
+    saveClassifier(svm_Classifier,display_name)
+    
 
 def get_SVM_Acc(a,b,c,d):
 
@@ -34,8 +59,24 @@ def get_SVM_Acc(a,b,c,d):
 
     acc = (Y_pred==Y_data_ts).mean()
 
+    
     return acc
+    
+def get_Naivebayes(a,b,c,d,display_name):
 
+    # Convert features into vector of numbers
+    from sklearn.feature_extraction import DictVectorizer
+    v1 = DictVectorizer().fit(a+c)
+
+    #define training data
+    X_data_tr = v1.transform(a)
+    Y_data_tr = b
+
+    #import Naive bayes classifier
+    from sklearn.naive_bayes import MultinomialNB
+    clf = MultinomialNB()
+    clf.fit(X_data_tr,Y_data_tr)
+    saveClassifier(clf,display_name)
 
 def get_Naivebayes_Acc(a,b,c,d):
 
@@ -68,9 +109,23 @@ def get_Naivebayes_Acc(a,b,c,d):
     #from sklearn.metrics import confusion_matrix
     #print(confusion_matrix(Y_data_ts,Y_pred))
 
-
-
     return acc
+
+def get_LinearRegression(a,b,c,d,display_name):
+
+    # Convert features into vector of numbers
+    from sklearn.feature_extraction import DictVectorizer
+    v1 = DictVectorizer().fit(a+c)
+
+    #define training data
+    X_data_tr = v1.transform(a)
+    Y_data_tr = b
+
+    #import Linear Regression classifier
+    from sklearn import linear_model
+    regr = linear_model.LinearRegression()
+    regr.fit(X_data_tr,Y_data_tr)
+    saveClassifier(regr,display_name)
 
 def get_LinearRegression_Acc(a,b,c,d):
 
