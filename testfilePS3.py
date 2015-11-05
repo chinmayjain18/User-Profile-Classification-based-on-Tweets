@@ -41,7 +41,7 @@ def main():
     f.close()
     
     f = open('age_bracket.pickle', 'rb')
-    age_bracket_classifier = pickle.load(f)
+    age_buckets_classifier = pickle.load(f)
     f.close()
     
     user_genders = []
@@ -88,7 +88,7 @@ def main():
     testAccuracy(gender_classifier,'gender', gender_features)
     testAccuracy(education_classifier,'education', education_features)
     testAccuracy(age_classifier,'age', age_features)
-    testAccuracy(age_bracket_classifier,'age_buckets', age_bucket_features)
+    testAccuracy(age_buckets_classifier,'age_buckets', age_bucket_features)
     
 if __name__ == '__main__':
     main()

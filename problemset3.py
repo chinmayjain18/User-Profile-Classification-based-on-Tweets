@@ -322,6 +322,12 @@ def _testAccuracy(display_type, classes, features):
     acc = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
     print(ACC_STRING.format(display_type, 'Linear Regression', acc))
 
+    # Save the classifier in a pickle file
+    filename = display_type + '.pickle'
+    f = open(filename, 'wb')
+    pickle.dump(classifier, f)
+    f.close()
+
     print("")
 
 def _filterFeatures(whitelist, features_list):
