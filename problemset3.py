@@ -183,13 +183,13 @@ def calculate_features(user_list):
 
         features = []
         features.append(dataStructures.AverageTweetLengthFeature(user))
-        features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
-        features.append(dataStructures.NumberOfMultiTweetsFeature(user))
+        #features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
+        #features.append(dataStructures.NumberOfMultiTweetsFeature(user))
         features.append(dataStructures.CountRetweet(user))
         features.append(dataStructures.CountLanguageUsed(user))
-        features.append(dataStructures.CountRegions(user))
-        features.append(dataStructures.AgeOccupation(user))
-        features.append(dataStructures.CountReplacements(user))
+        #features.append(dataStructures.CountRegions(user))
+        #features.append(dataStructures.AgeOccupation(user))
+        #features.append(dataStructures.CountReplacements(user))
         features.append(dataStructures.CountTweets(user))
 
         user_dict = {}
@@ -203,14 +203,14 @@ def calculate_features(user_list):
             tweetTB = TextBlob(tweet.rawText)
             tweetTB_tags = tweetTB.tags
 
-            tweet_features.append(dataStructures.CapitalizationFeature(tweet))
-            tweet_features.append(dataStructures.CountNouns(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountVerbs(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountAdjectives(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountPersonalReferences(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountPunctuations(tweet))
+            #tweet_features.append(dataStructures.CapitalizationFeature(tweet))
+            #tweet_features.append(dataStructures.CountNouns(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountVerbs(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountAdjectives(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountPersonalReferences(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountPunctuations(tweet))
             tweet_features.append(dataStructures.CountHashTags(tweet))
-            tweet_features.append(dataStructures.CountEmoticon(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountEmoticon(tweetTB, tweetTB_tags))
             tweet_features.append(dataStructures.CountEmotionalWords(tweetTB, listOfEmotionalWords, tweetTB_tags))
             tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
@@ -318,12 +318,12 @@ def _testAccuracy(display_type, classes, features):
 
     # Linear Regression
     acc3 = classifier.get_LinearRegression_Acc(display_type,train_features, train_classes, test_features, test_classes)
-    
+
     acc = max(acc1,acc2,acc3)
     print(ACC_STRING.format(display_type, acc))
 
     print("")
-    
+
 def trainClassifier(display_type, classifier_function, classes, features):
     '''
     Tests the accuracy, prints results.
@@ -371,53 +371,34 @@ def main():
     calculated_features = calculate_features(user_list)
 
     # Generated list of names of FrequencyOfTweetingFeature's
-    FrequencyOfTweetingFeature_NAMES = []
-    for x in range(0, 48):
-        FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
+    #FrequencyOfTweetingFeature_NAMES = []
+    #for x in range(0, 48):
+    #    FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
 
     gender_whitelist = [
         'AverageTweetLength',
-        #'NumberOfTimesOthersMentionedFeature',
-        #'CountNouns',
         'CountEmotionalWords',
-        #'CountNouns',
         'CountTweets',
-        #'CountEmoticon',
         'CountLanguageUsed'
-        #'Replacements',
-        #'CountRegions'
-    ] #+ FrequencyOfTweetingFeature_NAMES
+    ]
 
     education_whitelist = [
-        #'AverageTweetLength',
-        #'CapitalizationFeature',
         'CountCategoricalWords',
-        #'CountNouns',
-        #'CountPunctuations',
         'CountTweets',
-        'Occupation',
-        #'CountEmotionalWords',
-        #'CountHashTags',
-        #'CountTweets',
-        #'CountReplacements'
-    ] #+ FrequencyOfTweetingFeature_NAMES
+        'Occupation'
+    ]
 
     age_whitelist = [
-        #'AverageTweetLength',
         'CountCategoricalWords',
-        'CountNouns',
-        #'CapitalizationFeature',
-        #'CountHashTags'
-    ] #+ FrequencyOfTweetingFeature_NAMES
-
+        'CountNouns'
+    ]
 
     age_bucket_whitelist = [
         'AverageTweetLength',
         'CountHashTags',
         'Occupation',
-        #'CountCategoricalWords',
         'CountRetweet',
-    ]# + FrequencyOfTweetingFeature_NAMES
+    ]
 
     user_genders = []
     gender_features = []
@@ -487,10 +468,10 @@ def main():
     age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     # Test the accuracy
-    _testAccuracy('gender', user_genders, gender_features)
-    _testAccuracy('education', user_educations, education_features)
-    _testAccuracy('age', user_ages, age_features)
-    _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
+    #_testAccuracy('gender', user_genders, gender_features)
+    #_testAccuracy('education', user_educations, education_features)
+    #_testAccuracy('age', user_ages, age_features)
+    #_testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
 
     # Find the best combinations
     # _testNFeaturesTogether(2, user_genders, gender_features)
@@ -500,14 +481,11 @@ def main():
 
     # Find the best everything
     #_testAllFeatures(user_genders, gender_features)
-<<<<<<< HEAD
 
     trainClassifier('gender', classifier.get_SVM, user_genders, gender_features)
     trainClassifier('education', classifier.get_Naivebayes, user_educations, education_features)
     trainClassifier('age', classifier.get_Naivebayes, user_ages, age_features)
     trainClassifier('age_buckets', classifier.get_LinearRegression, user_age_buckets, age_bucket_features)
-=======
->>>>>>> origin/master
 
 if __name__ == '__main__':
     main()
