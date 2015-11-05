@@ -1,8 +1,16 @@
 #NLP Problem Set 3
 ---
-Execution Pattern: python testfilePS3.py [-h] [-v] data_folder
-[-h] is used to display the help options
-[-v] sets the verbose options
-Both these arguments are optional.
-data_folder is the path of the folder with the user files.
-We used path '../devdata' for our development.
+Authors: Cody Smith, Julien Eid, Sourabh Kulhare, Chinmay Jain
+
+```
+usage: problemset3.py [-h] [-v] data_folder
+
+Problem Set 3
+
+positional arguments:
+  data_folder  path to test data folder
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -v           verbose mode
+```
