@@ -232,6 +232,16 @@ def calculate_features(user_list):
 
     return calculated_features
 
+def _testAllFeatures(classes, features):
+    num_features = len(features[0].keys())
+    results = []
+    for n in range(1, num_features+1):
+        results += _testNFeaturesTogether(n, classes, features)
+    results.sort(key=lambda x: x[1])
+    results.reverse()
+    for x in results[:20]:
+        print(x)
+
 def _testNFeaturesTogether(n, classes, features):
     '''
     Test N features together in the classifier and sort's their performance
@@ -273,12 +283,14 @@ def _testNFeaturesTogether(n, classes, features):
             tmp = tmp + " " + s
         results.append( (tmp + best_classifier, best_perf) )
 
+    return results
     # Find best results and print top 5
-    results.sort(key=lambda x: x[1])
-    results.reverse()
-    for x in results[:5]:
-        print(x[0] + ': ' +str(x[1]))
-    print("")
+    # results.sort(key=lambda x: x[1])
+    # results.reverse()
+
+    # for x in results[:5]:
+    #     print(x[0] + ': ' +str(x[1]))
+    # print("")
 
 def _testAccuracy(display_type, classes, features):
     '''
@@ -438,10 +450,13 @@ def main():
     # _testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
 
     # Find the best combinations
-    _testNFeaturesTogether(2, user_genders, gender_features)
-    _testNFeaturesTogether(2, user_educations, education_features)
-    _testNFeaturesTogether(2, user_ages, age_features)
-    _testNFeaturesTogether(2, user_age_buckets, age_bucket_features)
+    # _testNFeaturesTogether(2, user_genders, gender_features)
+    # _testNFeaturesTogether(2, user_educations, education_features)
+    # _testNFeaturesTogether(2, user_ages, age_features)
+    # _testNFeaturesTogether(2, user_age_buckets, age_bucket_features)
+
+    # Find the best everything
+    _testAllFeatures(user_genders, gender_features)
 
 if __name__ == '__main__':
     main()
