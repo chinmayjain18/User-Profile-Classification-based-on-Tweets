@@ -116,6 +116,60 @@ def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=10)
 
 
 '''
+    Function to generate output files(.txt)
+        Parameters: 
+            usrnames(list)- contains usenames of test data.
+            Y_pred(list)- Predicted values for test data.
+            filename(string) - 'gender' or 'age' or 'education'
+'''
+
+def createTextFiles(usrnames,Y_pred,filename):
+    if filename == 'gender':
+        file_name = filename+'.txt'
+        file1 = open(file_name,'w')
+        for i in range(0,len(Y_pred)):
+            file1.write(str(usrnames[i]))
+            file1.write("\t")
+            if Y_pred[i]==0:
+                file1.write('Male')
+            elif Y_pred[i]==1:
+                file1.write('Female')
+            file1.write("\n")
+        
+        file1.close()
+    
+    elif filename == 'education':
+        file_name = filename+ '.txt'
+        file1 = open(file_name,'w')
+        for i in range(0,len(Y_pred)):
+            file1.write(str(usrnames[i]))
+            file1.write("\t")
+            if Y_pred[i]==0:
+                file1.write('high_school')
+            elif Y_pred[i]==1:
+                file1.write('some_college')
+            elif Y_pred[i]==2:
+                file1.write('graduate')
+            file1.write("\n")
+        file1.close()
+        
+    elif filename == 'age':
+        file_name = filename+ '.txt'
+        file1 = open(file_name,'w')
+        for i in range(0,len(Y_pred)):
+            file1.write(str(usrnames[i]))
+            file1.write("\t")
+            if Y_pred[i]>=1988:
+                file1.write('<=25')
+            elif (Y_pred[i]>=1978 and Y_pred[i]<=1987):
+                file1.write('26-35')
+            elif Y_pred[i]<=1977:
+                file1.write('>=36')
+            file1.write("\n")
+        file1.close()
+        
+
+'''
 Example:-
 
 import pickle
@@ -127,6 +181,15 @@ c1 = feature_dict[900:]
 d1 = Y_data[900:]
 
 acc = get_SVM_Acc(a1,b1,c1,d1)
+
+Example to generate .txt files: 
+
+usrname_temp = [12,13,14,15,16,17,18,19,20,21]
+Y_pred_gen = [1,0,1,0,1,0,1,1,0,0]
+Y_pred_age = [1900,1989,2000,1985,1988,1934,2004,1970,1979,2012]
+Y_pred_edu = [1,0,1,2,0,1,2,0,1,2]
+
+createTextFiles(usrname_temp,Y_pred_edu,'education')
 
 
 '''
