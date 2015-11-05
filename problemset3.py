@@ -467,10 +467,10 @@ def main():
     #print("Done with indiv testing.")
     #print("")
     # Filter out non-whitelist features
-    gender_features_train = _filterFeatures(gender_whitelist, gender_features_train)
-    education_features_train = _filterFeatures(education_whitelist, education_features_train)
-    age_features_train = _filterFeatures(age_whitelist, age_features_train)
-    age_bucket_features_train = _filterFeatures(age_bucket_whitelist, age_bucket_features_train)
+    gender_features_train = _filterFeatures(gender_whitelist, gender_features)
+    education_features_train = _filterFeatures(education_whitelist, education_features)
+    age_features_train = _filterFeatures(age_whitelist, age_features)
+    age_bucket_features_train = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     gender_features_test = _filterFeatures(gender_whitelist, calculated_features_test)
     education_features_test = _filterFeatures(education_whitelist, calculated_features_test)
