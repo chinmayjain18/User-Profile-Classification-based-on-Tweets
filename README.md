@@ -1,5 +1,4 @@
 #NLP Problem Set 3
----
 Authors: Cody Smith, Julien Eid, Sourabh Kulhare, Chinmay Jain
 
 ```
