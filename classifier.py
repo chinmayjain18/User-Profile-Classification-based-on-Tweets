@@ -221,7 +221,7 @@ def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=10)
             filename(string) - 'gender' or 'age' or 'education'
 '''
 
-def createTextFiles(usrnames,Y_pred,filename):
+def createTextFiles(usrnames,Y_pred,filename, age_bucket_ypred=[]):
     if filename == 'gender':
         file_name = filename+'.txt'
         file1 = open(file_name,'w')
@@ -257,11 +257,11 @@ def createTextFiles(usrnames,Y_pred,filename):
         for i in range(0,len(Y_pred)):
             file1.write(str(usrnames[i]))
             file1.write("\t")
-            if Y_pred[i]>=1988:
+            if age_bucket_ypred[i] == 0:
                 file1.write('<=25')
-            elif (Y_pred[i]>=1978 and Y_pred[i]<=1987):
+            elif age_bucket_ypred[i] == 1:
                 file1.write('26-35')
-            elif Y_pred[i]<=1977:
+            elif age_bucket_ypred[i] == 2:
                 file1.write('>=36')
             file1.write("\t")
             file1.write(str(Y_pred[i]))

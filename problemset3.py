@@ -492,11 +492,9 @@ def main():
     usernames = []
     for user in user_list_test:
         usernames.append(user.id)
-    print(len(usernames))
-    print(len(gender_ypred))
     classifier.createTextFiles(usernames, gender_ypred, "gender")
     classifier.createTextFiles(usernames, education_ypred, "education")
-    classifier.createTextFiles(usernames, age_ypred, "age")
+    classifier.createTextFiles(usernames, age_ypred, "age", age_bucket_ypred)
 
     #trainClassifier('gender', classifier.get_SVM, user_genders[:30], gender_features[:30])
     #trainClassifier('education', classifier.get_Naivebayes, user_educations[:30], education_features[:30])
