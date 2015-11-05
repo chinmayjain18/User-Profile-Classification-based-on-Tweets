@@ -324,71 +324,14 @@ def _testAccuracy(display_type, classes, features):
 
     print("")
 
-def predict_test_svm(display_type, classes, features):
-    '''
-    prints results.
-    Args:
-        display_type: String value of type to be displayed in print message (eg. 'gender')
-        train_classes: list of user's classes to train on (eg. genders)
-        train_features: corrisponding list of user's computed features
-        test_classes: list of user's classes to test on (eg. genders)
-        test_features: corrisponding list of user's computed features
-    '''
+def predict_test_lr(train_classes, train_features, test_features):
+    return classifier.get_LinearRegression_Acc(train_features, train_classes, test_features)
 
-    TEST_RATIO = 0.75
-    split_index = int(len(classes) * TEST_RATIO)
+def predict_test_nb(train_classes, train_features, test_features):
+    return classifier.get_Naivebayes_Acc(train_features, train_classes, test_features)
 
-    train_classes, test_classes = classes[:split_index], classes[split_index:]
-    train_features, test_features = features[:split_index], features[split_index:]
-
-    # SVM
-    y_pred = classifier.get_SVM_Acc(train_features, train_classes, test_features, test_classes)
-
-    return y_pred
-
-def predict_test_nb(display_type, classes, features):
-    '''
-    prints results.
-    Args:
-        display_type: String value of type to be displayed in print message (eg. 'gender')
-        train_classes: list of user's classes to train on (eg. genders)
-        train_features: corrisponding list of user's computed features
-        test_classes: list of user's classes to test on (eg. genders)
-        test_features: corrisponding list of user's computed features
-    '''
-
-    TEST_RATIO = 0.75
-    split_index = int(len(classes) * TEST_RATIO)
-
-    train_classes, test_classes = classes[:split_index], classes[split_index:]
-    train_features, test_features = features[:split_index], features[split_index:]
-
-    # SVM
-    y_pred = classifier.get_Naivebayes_Acc(train_features, train_classes, test_features, test_classes)
-
-    return y_pred
-
-def predict_test_lr(display_type, classes, features):
-    '''
-    prints results.
-    Args:
-        display_type: String value of type to be displayed in print message (eg. 'gender')
-        train_classes: list of user's classes to train on (eg. genders)
-        train_features: corrisponding list of user's computed features
-        test_classes: list of user's classes to test on (eg. genders)
-        test_features: corrisponding list of user's computed features
-    '''
-
-    #TEST_RATIO = 0.75
-    #split_index = int(len(classes) * TEST_RATIO)
-
-    train_classes, test_classes = classes[:-8], classes[-8:]
-    train_features, test_features = features[:-8], features[-8:]
-
-    # SVM
-    y_pred = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
-
-    return y_pred
+def predict_test_svm(train_classes, train_features, test_features):
+    return classifier.get_SVM_Acc(train_features, train_classes, test_features)
 
 def trainClassifier(display_type, classifier_function, classes, features):
     '''
@@ -425,16 +368,22 @@ def _filterFeatures(whitelist, features_list):
 def main():
 
     parser = argparse.ArgumentParser(description='Problem Set 3')
-    parser.add_argument('data_folder', help='path to data folder')
+    #parser.add_argument('data_folder_test', help='path to data folder')
+    parser.add_argument('data_folder', help='path to test data folder')
     parser.add_argument('-v', help='verbose mode', action="store_true")
 
     args = parser.parse_args()
 
     verbose_mode = bool(args.v)
 
-    user_list = load_data(args.data_folder)
+    user_list_train = []
+    with open('training_user_list.pickle', 'rb') as f:
+        user_list_train = pickle.load(f)
 
-    calculated_features = calculate_features(user_list)
+    user_list_test = load_data(args.data_folder)
+
+    calculated_features_test = calculate_features(user_list_test)
+    calculated_features_train = calculate_features(user_list_train)
 
     # Generated list of names of FrequencyOfTweetingFeature's
     #FrequencyOfTweetingFeature_NAMES = []
@@ -478,7 +427,7 @@ def main():
     user_age_buckets = []
     age_bucket_features = []
 
-    for user, user_feature in zip(user_list, calculated_features):
+    for user, user_feature in zip(user_list_train, calculated_features_train):
         if user.gender == "Male":
             user_genders.append(0)
             gender_features.append(user_feature)
@@ -518,10 +467,15 @@ def main():
     #print("Done with indiv testing.")
     #print("")
     # Filter out non-whitelist features
-    gender_features = _filterFeatures(gender_whitelist, gender_features)
-    education_features = _filterFeatures(education_whitelist, education_features)
-    age_features = _filterFeatures(age_whitelist, age_features)
-    age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
+    gender_features_train = _filterFeatures(gender_whitelist, gender_features_train)
+    education_features_train = _filterFeatures(education_whitelist, education_features_train)
+    age_features_train = _filterFeatures(age_whitelist, age_features_train)
+    age_bucket_features_train = _filterFeatures(age_bucket_whitelist, age_bucket_features_train)
+
+    gender_features_test = _filterFeatures(gender_whitelist, calculated_features_test)
+    education_features_test = _filterFeatures(education_whitelist, calculated_features_test)
+    age_features_test = _filterFeatures(age_whitelist, calculated_features_test)
+    age_bucket_features_test = _filterFeatures(age_bucket_whitelist, calculated_features_test)
 
     # Test the accuracy
     #_testAccuracy('gender', user_genders, gender_features)
@@ -529,14 +483,14 @@ def main():
     #_testAccuracy('age', user_ages, age_features)
     #_testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
 
-    # Test the accuracy
-    gender_ypred = predict_test_svm('gender', user_genders, gender_features)
-    education_ypred = predict_test_nb('education', user_educations, education_features)
-    age_ypred = predict_test_nb('age', user_ages, age_features)
-    age_bucket_ypred = predict_test_lr('age_buckets', user_age_buckets, age_bucket_features)
+    # Predict
+    gender_ypred = predict_test_svm(user_genders, gender_features_train, gender_features_test)
+    education_ypred = predict_test_nb(user_educations, education_features_train, education_features_test)
+    age_ypred = predict_test_nb(user_ages, age_features_train, age_features_test)
+    age_bucket_ypred = predict_test_lr(user_age_buckets, age_bucket_features_train, age_bucket_features_test)
 
     usernames = []
-    for user in user_list[-8:]:
+    for user in user_list_test:
         usernames.append(user.id)
     print(len(usernames))
     print(len(gender_ypred))

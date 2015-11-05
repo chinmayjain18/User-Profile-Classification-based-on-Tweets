@@ -34,7 +34,7 @@ def get_SVM(a,b,c,d,display_name):
     saveClassifier(svm_Classifier,display_name)
 
 
-def get_SVM_Acc(a,b,c,d):
+def get_SVM_Acc(a,b,c):
 
     # Convert features into vector of numbers
     from sklearn.feature_extraction import DictVectorizer
@@ -46,7 +46,6 @@ def get_SVM_Acc(a,b,c,d):
 
     #define test data
     X_data_ts = v1.transform(c)
-    Y_data_ts = d
 
     #import linear SVM
     from sklearn.svm import LinearSVC
@@ -75,7 +74,7 @@ def get_Naivebayes(a,b,c,d,display_name):
     clf.fit(X_data_tr,Y_data_tr)
     saveClassifier(clf,display_name)
 
-def get_Naivebayes_Acc(a,b,c,d):
+def get_Naivebayes_Acc(a,b,c):
 
     # Convert features into vector of numbers
     from sklearn.feature_extraction import DictVectorizer
@@ -87,7 +86,6 @@ def get_Naivebayes_Acc(a,b,c,d):
 
     #define test data
     X_data_ts = v1.transform(c)
-    Y_data_ts = d
 
     #import Naive bayes classifier
     from sklearn.naive_bayes import MultinomialNB
@@ -123,7 +121,7 @@ def get_LinearRegression(a,b,c,d,display_name):
     regr.fit(X_data_tr,Y_data_tr)
     saveClassifier(regr,display_name)
 
-def get_LinearRegression_Acc(a,b,c,d):
+def get_LinearRegression_Acc(a,b,c):
 
     # Convert features into vector of numbers
     from sklearn.feature_extraction import DictVectorizer
@@ -135,8 +133,6 @@ def get_LinearRegression_Acc(a,b,c,d):
 
     #define test data
     X_data_ts = v1.transform(c)
-    Y_data_ts = d
-
 
     #import Linear Regression classifier
     import numpy as np
@@ -297,5 +293,3 @@ createTextFiles(usrname_temp,Y_pred_edu,'education')
 
 
 '''
-
-
