@@ -136,7 +136,6 @@ def main():
     age_bucket_features = problemset3._filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     #gender svm, education nb, age nb, age_bucket lr
-    print(gender_features)
     gender_ypred = clf_mod.get_SVM_class(gender_classifier, gender_features)
     education_ypred = clf_mod.get_Naivebayes_class(education_classifier, education_features)
     age_ypred = clf_mod.get_Naivebayes_class(age_classifier, age_features)

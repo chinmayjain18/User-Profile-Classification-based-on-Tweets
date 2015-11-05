@@ -501,10 +501,10 @@ def main():
     # Find the best everything
     #_testAllFeatures(user_genders, gender_features)
 
-    trainClassifier('gender', classifier.get_SVM, user_genders, gender_features)
-    trainClassifier('education', classifier.get_Naivebayes, user_educations, education_features)
-    trainClassifier('age', classifier.get_Naivebayes, user_ages, age_features)
-    trainClassifier('age_buckets', classifier.get_LinearRegression, user_age_buckets, age_bucket_features)
+    trainClassifier('gender', classifier.get_SVM, user_genders[:30], gender_features[:30])
+    trainClassifier('education', classifier.get_Naivebayes, user_educations[:30], education_features[:30])
+    trainClassifier('age', classifier.get_Naivebayes, user_ages[:30], age_features[:30])
+    trainClassifier('age_buckets', classifier.get_LinearRegression, user_age_buckets[:30], age_bucket_features[:30])
 
 if __name__ == '__main__':
     main()
