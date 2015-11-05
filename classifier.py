@@ -267,6 +267,8 @@ def createTextFiles(usrnames,Y_pred,filename):
                 file1.write('26-35')
             elif Y_pred[i]<=1977:
                 file1.write('>=36')
+            file1.write("\t")
+            file1.write(str(Y_pred[i]))
             file1.write("\n")
         file1.close()
 

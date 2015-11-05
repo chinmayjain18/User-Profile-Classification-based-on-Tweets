@@ -183,13 +183,13 @@ def calculate_features(user_list):
 
         features = []
         features.append(dataStructures.AverageTweetLengthFeature(user))
-        features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
-        features.append(dataStructures.NumberOfMultiTweetsFeature(user))
+        #features.append(dataStructures.NumberOfTimesOthersMentionedFeature(user))
+        #features.append(dataStructures.NumberOfMultiTweetsFeature(user))
         features.append(dataStructures.CountRetweet(user))
         features.append(dataStructures.CountLanguageUsed(user))
-        features.append(dataStructures.CountRegions(user))
-        features.append(dataStructures.AgeOccupation(user))
-        features.append(dataStructures.CountReplacements(user))
+        #features.append(dataStructures.CountRegions(user))
+        #features.append(dataStructures.AgeOccupation(user))
+        #features.append(dataStructures.CountReplacements(user))
         features.append(dataStructures.CountTweets(user))
 
         user_dict = {}
@@ -203,14 +203,14 @@ def calculate_features(user_list):
             tweetTB = TextBlob(tweet.rawText)
             tweetTB_tags = tweetTB.tags
 
-            tweet_features.append(dataStructures.CapitalizationFeature(tweet))
-            tweet_features.append(dataStructures.CountNouns(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountVerbs(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountAdjectives(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountPersonalReferences(tweetTB, tweetTB_tags))
-            tweet_features.append(dataStructures.CountPunctuations(tweet))
+            #tweet_features.append(dataStructures.CapitalizationFeature(tweet))
+            #tweet_features.append(dataStructures.CountNouns(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountVerbs(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountAdjectives(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountPersonalReferences(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountPunctuations(tweet))
             tweet_features.append(dataStructures.CountHashTags(tweet))
-            tweet_features.append(dataStructures.CountEmoticon(tweetTB, tweetTB_tags))
+            #tweet_features.append(dataStructures.CountEmoticon(tweetTB, tweetTB_tags))
             tweet_features.append(dataStructures.CountEmotionalWords(tweetTB, listOfEmotionalWords, tweetTB_tags))
             tweet_features.append(dataStructures.CountCategoricalWords(tweet))
 
@@ -437,53 +437,34 @@ def main():
     calculated_features = calculate_features(user_list)
 
     # Generated list of names of FrequencyOfTweetingFeature's
-    FrequencyOfTweetingFeature_NAMES = []
-    for x in range(0, 48):
-        FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
+    #FrequencyOfTweetingFeature_NAMES = []
+    #for x in range(0, 48):
+    #    FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
 
     gender_whitelist = [
         'AverageTweetLength',
-        #'NumberOfTimesOthersMentionedFeature',
-        #'CountNouns',
         'CountEmotionalWords',
-        #'CountNouns',
         'CountTweets',
-        #'CountEmoticon',
         'CountLanguageUsed'
-        #'Replacements',
-        #'CountRegions'
-    ] #+ FrequencyOfTweetingFeature_NAMES
+    ]
 
     education_whitelist = [
-        #'AverageTweetLength',
-        #'CapitalizationFeature',
         'CountCategoricalWords',
-        #'CountNouns',
-        #'CountPunctuations',
         'CountTweets',
-        'Occupation',
-        #'CountEmotionalWords',
-        #'CountHashTags',
-        #'CountTweets',
-        #'CountReplacements'
-    ] #+ FrequencyOfTweetingFeature_NAMES
+        'Occupation'
+    ]
 
     age_whitelist = [
-        #'AverageTweetLength',
         'CountCategoricalWords',
-        'CountNouns',
-        #'CapitalizationFeature',
-        #'CountHashTags'
-    ] #+ FrequencyOfTweetingFeature_NAMES
-
+        'CountNouns'
+    ]
 
     age_bucket_whitelist = [
         'AverageTweetLength',
         'CountHashTags',
         'Occupation',
-        #'CountCategoricalWords',
         'CountRetweet',
-    ]# + FrequencyOfTweetingFeature_NAMES
+    ]
 
     user_genders = []
     gender_features = []
