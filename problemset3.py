@@ -324,6 +324,72 @@ def _testAccuracy(display_type, classes, features):
 
     print("")
 
+def predict_test_svm(display_type, classes, features):
+    '''
+    prints results.
+    Args:
+        display_type: String value of type to be displayed in print message (eg. 'gender')
+        train_classes: list of user's classes to train on (eg. genders)
+        train_features: corrisponding list of user's computed features
+        test_classes: list of user's classes to test on (eg. genders)
+        test_features: corrisponding list of user's computed features
+    '''
+
+    TEST_RATIO = 0.75
+    split_index = int(len(classes) * TEST_RATIO)
+
+    train_classes, test_classes = classes[:split_index], classes[split_index:]
+    train_features, test_features = features[:split_index], features[split_index:]
+
+    # SVM
+    y_pred = classifier.get_SVM_Acc(train_features, train_classes, test_features, test_classes)
+
+    return y_pred
+
+def predict_test_nb(display_type, classes, features):
+    '''
+    prints results.
+    Args:
+        display_type: String value of type to be displayed in print message (eg. 'gender')
+        train_classes: list of user's classes to train on (eg. genders)
+        train_features: corrisponding list of user's computed features
+        test_classes: list of user's classes to test on (eg. genders)
+        test_features: corrisponding list of user's computed features
+    '''
+
+    TEST_RATIO = 0.75
+    split_index = int(len(classes) * TEST_RATIO)
+
+    train_classes, test_classes = classes[:split_index], classes[split_index:]
+    train_features, test_features = features[:split_index], features[split_index:]
+
+    # SVM
+    y_pred = classifier.get_Naivebayes_Acc(train_features, train_classes, test_features, test_classes)
+
+    return y_pred
+
+def predict_test_lr(display_type, classes, features):
+    '''
+    prints results.
+    Args:
+        display_type: String value of type to be displayed in print message (eg. 'gender')
+        train_classes: list of user's classes to train on (eg. genders)
+        train_features: corrisponding list of user's computed features
+        test_classes: list of user's classes to test on (eg. genders)
+        test_features: corrisponding list of user's computed features
+    '''
+
+    TEST_RATIO = 0.75
+    split_index = int(len(classes) * TEST_RATIO)
+
+    train_classes, test_classes = classes[:split_index], classes[split_index:]
+    train_features, test_features = features[:split_index], features[split_index:]
+
+    # SVM
+    y_pred = classifier.get_LinearRegression_Acc(train_features, train_classes, test_features, test_classes)
+
+    return y_pred
+
 def trainClassifier(display_type, classifier_function, classes, features):
     '''
     Tests the accuracy, prints results.
@@ -468,16 +534,6 @@ def main():
         print(len(age_bucket_features))
         print(user_ages)
 
-    ## Test each feature one at a time for everything
-    #feature_keys = gender_features[0].keys()
-    #for feature_name in feature_keys:
-    #    print('\n' + feature_name)
-    #    # Test the accuracy
-    #    _testAccuracy('gender', user_genders, _filterFeatures([feature_name], gender_features))
-    #    _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
-    #    _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
-    #    _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
-
     #print("Done with indiv testing.")
     #print("")
     # Filter out non-whitelist features
@@ -492,19 +548,23 @@ def main():
     #_testAccuracy('age', user_ages, age_features)
     #_testAccuracy('age_buckets', user_age_buckets, age_bucket_features)
 
-    # Find the best combinations
-    # _testNFeaturesTogether(2, user_genders, gender_features)
-    # _testNFeaturesTogether(2, user_educations, education_features)
-    # _testNFeaturesTogether(2, user_ages, age_features)
-    # _testNFeaturesTogether(2, user_age_buckets, age_bucket_features)
+    # Test the accuracy
+    gender_ypred = predict_test_svm('gender', user_genders, gender_features)
+    education_ypred = predict_test_nb('education', user_educations, education_features)
+    age_ypred = predict_test_nb('age', user_ages, age_features)
+    age_bucket_ypred = predict_test_lr('age_buckets', user_age_buckets, age_bucket_features)
 
-    # Find the best everything
-    #_testAllFeatures(user_genders, gender_features)
+    usernames = []
+    for i in range(32,40):
+        usernames.append(user_list[i].id)
+    classifier.createTextFiles(usernames, gender_ypred, "gender")
+    classifier.createTextFiles(usernames, education_ypred, "education")
+    classifier.createTextFiles(usernames, age_ypred, "age")
 
-    trainClassifier('gender', classifier.get_SVM, user_genders[:30], gender_features[:30])
-    trainClassifier('education', classifier.get_Naivebayes, user_educations[:30], education_features[:30])
-    trainClassifier('age', classifier.get_Naivebayes, user_ages[:30], age_features[:30])
-    trainClassifier('age_buckets', classifier.get_LinearRegression, user_age_buckets[:30], age_bucket_features[:30])
+    #trainClassifier('gender', classifier.get_SVM, user_genders[:30], gender_features[:30])
+    #trainClassifier('education', classifier.get_Naivebayes, user_educations[:30], education_features[:30])
+    #trainClassifier('age', classifier.get_Naivebayes, user_ages[:30], age_features[:30])
+    #trainClassifier('age_buckets', classifier.get_LinearRegression, user_age_buckets[:30], age_bucket_features[:30])
 
 if __name__ == '__main__':
     main()

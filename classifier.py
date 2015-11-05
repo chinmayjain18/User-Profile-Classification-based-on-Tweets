@@ -57,10 +57,7 @@ def get_SVM_Acc(a,b,c,d):
     #Use trained model to classify test data
     Y_pred = svm_Classifier.predict(X_data_ts)
 
-    acc = (Y_pred==Y_data_ts).mean()
-
-
-    return acc
+    return Y_pred
 
 def get_Naivebayes(a,b,c,d,display_name):
 
@@ -100,7 +97,7 @@ def get_Naivebayes_Acc(a,b,c,d):
     #Use trained model to classify test data
     Y_pred = clf.predict(X_data_ts)
 
-    acc = (Y_pred==Y_data_ts).mean()
+    return Y_pred
     #print(len(clf.classes_))
     #print(clf.classes_)
     #most_informative_feature_for_class(v1,clf, clf.classes_[0])
@@ -109,7 +106,6 @@ def get_Naivebayes_Acc(a,b,c,d):
     #from sklearn.metrics import confusion_matrix
     #print(confusion_matrix(Y_data_ts,Y_pred))
 
-    return acc
 
 def get_LinearRegression(a,b,c,d,display_name):
 
@@ -153,12 +149,11 @@ def get_LinearRegression_Acc(a,b,c,d):
     # Convert into nearest integer
     Y_pred = np.rint(Y_pred)
 
-    acc = (Y_pred==Y_data_ts).mean()
+    return Y_pred
 
     #from sklearn.metrics import confusion_matrix
     #print(confusion_matrix(Y_data_ts,Y_pred))
 
-    return acc
 
 def get_LinearRegression_class(regr, c):
 
