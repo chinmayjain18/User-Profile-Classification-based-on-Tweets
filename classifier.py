@@ -16,7 +16,7 @@ def saveClassifier(classifier,display_type):
     f = open(filename, 'wb')
     pickle.dump(classifier, f)
     f.close()
-    
+
 def get_SVM(a,b,c,d,display_name):
     # Convert features into vector of numbers
     from sklearn.feature_extraction import DictVectorizer
@@ -32,7 +32,7 @@ def get_SVM(a,b,c,d,display_name):
     #generate model
     svm_Classifier = LinearSVC().fit(X_data_tr, Y_data_tr)
     saveClassifier(svm_Classifier,display_name)
-    
+
 
 def get_SVM_Acc(a,b,c,d):
 
@@ -59,9 +59,9 @@ def get_SVM_Acc(a,b,c,d):
 
     acc = (Y_pred==Y_data_ts).mean()
 
-    
+
     return acc
-    
+
 def get_Naivebayes(a,b,c,d,display_name):
 
     # Convert features into vector of numbers
@@ -160,6 +160,58 @@ def get_LinearRegression_Acc(a,b,c,d):
 
     return acc
 
+def get_LinearRegression_class(regr, c):
+
+    # Convert features into vector of numbers
+    from sklearn.feature_extraction import DictVectorizer
+    v1 = DictVectorizer().fit(c)
+
+    #define test data
+    X_data_ts = v1.transform(c)
+
+    import numpy as np
+    #import Linear Regression classifier
+    #Use trained model to classify test data
+    Y_pred = regr.predict(X_data_ts)
+    # Convert into nearest integer
+    Y_pred = np.rint(Y_pred)
+    return Y_pred
+
+def get_Naivebayes_class(clf,c):
+
+    # Convert features into vector of numbers
+    from sklearn.feature_extraction import DictVectorizer
+    v1 = DictVectorizer().fit(c)
+
+    X_data_ts = v1.transform(c)
+
+    #import Naive bayes classifier
+    #Use trained model to classify test data
+    Y_pred = clf.predict(X_data_ts)
+    return Y_pred
+
+    #print(len(clf.classes_))
+    #print(clf.classes_)
+    #most_informative_feature_for_class(v1,clf, clf.classes_[0])
+    #most_informative_feature_for_class(v1,clf, clf.classes_[1])
+
+    #from sklearn.metrics import confusion_matrix
+    #print(confusion_matrix(Y_data_ts,Y_pred))
+
+
+def get_SVM_class(svm_Classifier,c):
+
+    # Convert features into vector of numbers
+    from sklearn.feature_extraction import DictVectorizer
+    v1 = DictVectorizer().fit(c)
+
+    X_data_ts = v1.transform(c)
+
+
+    #Use trained model to classify test data
+    Y_pred = svm_Classifier.predict(X_data_ts)
+    return Y_pred
+
 
 def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=10):
     labelid = list(classifier.classes_).index(classlabel)
@@ -172,7 +224,7 @@ def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=10)
 
 '''
     Function to generate output files(.txt)
-        Parameters: 
+        Parameters:
             usrnames(list)- contains usenames of test data.
             Y_pred(list)- Predicted values for test data.
             filename(string) - 'gender' or 'age' or 'education'
@@ -190,9 +242,9 @@ def createTextFiles(usrnames,Y_pred,filename):
             elif Y_pred[i]==1:
                 file1.write('Female')
             file1.write("\n")
-        
+
         file1.close()
-    
+
     elif filename == 'education':
         file_name = filename+ '.txt'
         file1 = open(file_name,'w')
@@ -207,7 +259,7 @@ def createTextFiles(usrnames,Y_pred,filename):
                 file1.write('graduate')
             file1.write("\n")
         file1.close()
-        
+
     elif filename == 'age':
         file_name = filename+ '.txt'
         file1 = open(file_name,'w')
@@ -222,7 +274,7 @@ def createTextFiles(usrnames,Y_pred,filename):
                 file1.write('>=36')
             file1.write("\n")
         file1.close()
-        
+
 
 '''
 Example:-
@@ -237,7 +289,7 @@ d1 = Y_data[900:]
 
 acc = get_SVM_Acc(a1,b1,c1,d1)
 
-Example to generate .txt files: 
+Example to generate .txt files:
 
 usrname_temp = [12,13,14,15,16,17,18,19,20,21]
 Y_pred_gen = [1,0,1,0,1,0,1,1,0,0]
