@@ -302,20 +302,35 @@ def main():
         FrequencyOfTweetingFeature_NAMES.append('FrequencyOfTweetingFeature_' + str(x))
 
     gender_whitelist = [
-        'AverageTweetLength'
-    ] + FrequencyOfTweetingFeature_NAMES
-
-    age_whitelist = [
-        'AverageTweetLength'
+        #'AverageTweetLength',
+        #'NumberOfTimesOthersMentionedFeature',
+        'CountNouns'
     ] + FrequencyOfTweetingFeature_NAMES
 
     education_whitelist = [
-        'AverageTweetLength'
-    ] + FrequencyOfTweetingFeature_NAMES
+        #'AverageTweetLength',
+        #'CapitalizationFeature',
+        'CountCategoricalWords',
+        'CountNouns',
+        #'CountEmotionalWords',
+        #'CountHashTags',
+        #'CountTweets',
+        #'CountReplacements'
+    ] #+ FrequencyOfTweetingFeature_NAMES
+
+    age_whitelist = [
+        #'AverageTweetLength',
+        'CountCategoricalWords',
+        'CountNouns',
+        #'CapitalizationFeature',
+        #'CountHashTags'
+    ] #+ FrequencyOfTweetingFeature_NAMES
+
 
     age_bucket_whitelist = [
-        'AverageTweetLength'
-    ] + FrequencyOfTweetingFeature_NAMES
+        'AverageTweetLength',
+        'CountHashTags',
+    ]# + FrequencyOfTweetingFeature_NAMES
 
     user_genders = []
     gender_features = []
@@ -372,16 +387,17 @@ def main():
     #    print('\n' + feature_name)
     #    # Test the accuracy
     #    _testAccuracy('gender', user_genders, _filterFeatures([feature_name], gender_features))
-    ##    _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
-    ##    _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
-    ##    _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
-    #return
+    #    _testAccuracy('education', user_educations, _filterFeatures([feature_name], education_features))
+    #    _testAccuracy('age', user_ages, _filterFeatures([feature_name], age_features))
+    #    _testAccuracy('age_buckets', user_age_buckets, _filterFeatures([feature_name], age_bucket_features))
 
+    #print("Done with indiv testing.")
+    #print("")
     # Filter out non-whitelist features
-    # gender_features = _filterFeatures(gender_whitelist, gender_features)
-    # education_features = _filterFeatures(education_whitelist, education_features)
-    # age_features = _filterFeatures(age_whitelist, age_features)
-    # age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
+    gender_features = _filterFeatures(gender_whitelist, gender_features)
+    education_features = _filterFeatures(education_whitelist, education_features)
+    age_features = _filterFeatures(age_whitelist, age_features)
+    age_bucket_features = _filterFeatures(age_bucket_whitelist, age_bucket_features)
 
     # Test the accuracy
     _testAccuracy('gender', user_genders, gender_features)
