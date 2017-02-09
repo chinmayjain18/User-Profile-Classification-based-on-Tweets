@@ -1,4 +1,4 @@
-#NLP Problem Set 3
+#User Profile Classification based on Tweets
 **Authors:** Cody Smith, Julien Eid, Sourabh Kulhare, Chinmay Jain
 
 ```
